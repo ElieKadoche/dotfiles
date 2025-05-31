@@ -205,19 +205,15 @@ alias vim=nvim;
 # Do not use rsync on git folders, use gitpp command instead
 # Arguments --> $1 disk name and $2 dry (eventually)
 bbb() {
-    if [[ "$2" = "dry" ]]; then
-        if [[ $_SYSTEM = "android" ]]; then
-            rsync -vruh --dry-run --delete --iconv=utf-8,utf-8-mac --rsync-path=/opt/homebrew/bin/rsync --exclude={"backup/*","git_apps/*","miscellaneous_/*"} -e "ssh -p $_SSH_PORT" $_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/data/ $ORIGIN/;
-        else
-            rsync -vrulpEh --dry-run --delete --exclude={"backup/completed/*","git_apps/*"} $ORIGIN/ /Volumes/$1/data/;
-        fi
-
-    else
-        if [[ $_SYSTEM = "android" ]]; then
-            rsync -vruh --delete --iconv=utf-8,utf-8-mac --rsync-path=/opt/homebrew/bin/rsync --exclude={"backup/*","git_apps/*","miscellaneous_/*"} -e "ssh -p $_SSH_PORT" $_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/data/ $ORIGIN/;
-        else
-            rsync -vrulpEh --delete --exclude={"backup/completed/*","git_apps/*"} $ORIGIN/ /Volumes/$1/data/;
-        fi
+    if [[ "$1" = "android" ]]; then
+        rsync -vruh --delete --iconv=utf-8,utf-8-mac --rsync-path=/opt/homebrew/bin/rsync --exclude={"backup/*","git_apps/*","miscellaneous_/*"} -e "ssh -p $_SSH_PORT" $_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/data/ $ORIGIN/;
+        # rsync -vruh --dry-run --delete --iconv=utf-8,utf-8-mac --rsync-path=/opt/homebrew/bin/rsync --exclude={"backup/*","git_apps/*","miscellaneous_/*"} -e "ssh -p $_SSH_PORT" $_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/data/ $ORIGIN/;
+    elif [[ "$1" = "backup" ]]; then
+        rsync -vrulpEh --delete --iconv=utf-8,utf-8-mac --exclude={"backup/completed/*","git_apps/*"} $ORIGIN/ /Volumes/backup/data/;
+        # rsync -vrulpEh --dry-run --delete --iconv=utf-8,utf-8-mac --exclude={"backup/completed/*","git_apps/*"} $ORIGIN/ /Volumes/backup/data/;
+    elif [[ "$1" = "safety" ]]; then
+        rsync -vrulpEh --delete --exclude={"backup/completed/*","git_apps/*"} $ORIGIN/ /Volumes/safety/data/;
+        # rsync -vrulpEh --dry-run --delete --exclude={"backup/completed/*","git_apps/*"} $ORIGIN/ /Volumes/safety/data/;
     fi
 }
 
