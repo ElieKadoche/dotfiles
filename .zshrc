@@ -171,16 +171,16 @@ alias l="ls --all --author --color=auto --group-directories-first --human-readab
 alias ll="ls -1 -a -v --group-directories-first";
 
 # Open Firefox with default websites
-alias fff="nohup firefox $ORIGIN/internet/{google/mail.html,google/calendar.html} > /dev/null 2>&1 &; disown";
+alias fff="nohup firefox $ORIGIN/documents/internet/{google/mail.html,google/calendar.html} > /dev/null 2>&1 &; disown";
 
 # Display markdown files in terminal
 alias mdd="python -m rich.markdown";
 
 # Music
-mpva() {find $ORIGIN/music -type f -exec mpv --shuffle --no-video {} +}
-mpvc() {find $ORIGIN/music/classical -type f -exec mpv --shuffle --no-video {} +}
-mpvo() {find $ORIGIN/music/others -type f -exec mpv --shuffle --no-video {} +}
-mpvs() {find $ORIGIN/music -type f -ipath "*$1*" -exec mpv --shuffle --no-video {} +}
+mpva() {find $ORIGIN/musics -type f -exec mpv --shuffle --no-video {} +}
+mpvc() {find $ORIGIN/musics/classical -type f -exec mpv --shuffle --no-video {} +}
+mpvo() {find $ORIGIN/musics/others -type f -exec mpv --shuffle --no-video {} +}
+mpvs() {find $ORIGIN/musics -type f -ipath "*$1*" -exec mpv --shuffle --no-video {} +}
 
 # Others
 alias ...="cd ../../";
@@ -204,31 +204,19 @@ alias vim=nvim;
 # Always use --dry-run if you are unsure of your actions
 # Do not use rsync on git folders, use gitpp command instead
 # Arguments --> $1 disk name and $2 dry (eventually)
-#
-# On disk
-# rsync -vruh --delete --exclude={"git_apps/*","life_s_backup/completed/*"} $ORIGIN/ /Volumes/random_backup/data/;
-#
-# On disk, with same file system (add links, permissions and executability options)
-# rsync -vrulpEh --delete --exclude={"git_apps/*","life_s_backup/completed/*"} $ORIGIN/ /Volumes/random_backup/data/;
-#
-# From Android to Darwin
-# rsync -vruh --delete --iconv=utf-8,utf-8-mac --rsync-path=/opt/homebrew/bin/rsync --exclude={"git_apps/*","life_s_backup/*","miscellaneous_/*"} $_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/data/ $ORIGIN/
-#
-# With IPv6
-# rsync -vruEh --delete --exclude={"git_apps/*","life_s_backup/completed/*","life_s_backup/buffering/*","miscellaneous_/*"} -e "ssh -p $_SSH_PORT" "$_SSH_USER_NAME@[$_SSH_PUBLIC_IP]":~/data/ $ORIGIN/;
 bbb() {
     if [[ "$2" = "dry" ]]; then
         if [[ $_SYSTEM = "android" ]]; then
-            rsync -vruh --dry-run --delete --iconv=utf-8,utf-8-mac --rsync-path=/opt/homebrew/bin/rsync --exclude={"git_apps/*","life_s_backup/*","miscellaneous_/*"} -e "ssh -p $_SSH_PORT" $_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/data/ $ORIGIN/;
+            rsync -vruh --dry-run --delete --iconv=utf-8,utf-8-mac --rsync-path=/opt/homebrew/bin/rsync --exclude={"backup/*","git_apps/*","miscellaneous_/*"} -e "ssh -p $_SSH_PORT" $_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/data/ $ORIGIN/;
         else
-            rsync -vrulpEh --dry-run --delete --exclude={"git_apps/*","life_s_backup/completed/*"} $ORIGIN/ /Volumes/$1/data/;
+            rsync -vrulpEh --dry-run --delete --exclude={"backup/completed/*","git_apps/*"} $ORIGIN/ /Volumes/$1/data/;
         fi
 
     else
         if [[ $_SYSTEM = "android" ]]; then
-            rsync -vruh --delete --iconv=utf-8,utf-8-mac --rsync-path=/opt/homebrew/bin/rsync --exclude={"git_apps/*","life_s_backup/*","miscellaneous_/*"} -e "ssh -p $_SSH_PORT" $_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/data/ $ORIGIN/;
+            rsync -vruh --delete --iconv=utf-8,utf-8-mac --rsync-path=/opt/homebrew/bin/rsync --exclude={"backup/*","git_apps/*","miscellaneous_/*"} -e "ssh -p $_SSH_PORT" $_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/data/ $ORIGIN/;
         else
-            rsync -vrulpEh --delete --exclude={"git_apps/*","life_s_backup/completed/*"} $ORIGIN/ /Volumes/$1/data/;
+            rsync -vrulpEh --delete --exclude={"backup/completed/*","git_apps/*"} $ORIGIN/ /Volumes/$1/data/;
         fi
     fi
 }
