@@ -212,7 +212,7 @@ bbb() {
         rsync -vrulpEh --delete --iconv=utf-8,utf-8-mac --exclude={"backup/completed/*","documents/*","git_apps/*"} $ORIGIN/ /Volumes/backup/data/;
         # rsync -vrulpEh --dry-run --delete --iconv=utf-8,utf-8-mac --exclude={"backup/completed/*","documents/*","git_apps/*"} $ORIGIN/ /Volumes/backup/data/;
     elif [[ "$1" = "safety" ]]; then
-        rsync -vrulpEh --delete --exclude={"backup/completed/*",""."git_apps/*"} $ORIGIN/ /Volumes/safety/data/;
+        rsync -vrulpEh --delete --exclude={"backup/completed/*","git_apps/*"} $ORIGIN/ /Volumes/safety/data/;
         # rsync -vrulpEh --dry-run --delete --exclude={"backup/completed/*","git_apps/*"} $ORIGIN/ /Volumes/safety/data/;
     fi
 }
