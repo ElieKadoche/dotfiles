@@ -162,6 +162,9 @@ source $ZSH/oh-my-zsh.sh
 # Compilation flags
 # export ARCHFLAGS="-arch $(uname -m)"
 
+# Disable rm prompt
+setopt RM_STAR_SILENT
+
 # Aliases
 # ------------------------------------------
 # ------------------------------------------
