@@ -336,7 +336,11 @@ renameAll() {
         # extension=`echo $file | sed -n -e 's/^.*\.//p'`;  # But without the point
         extension=$(python -c 'import os, sys; _, ext = os.path.splitext(sys.argv[1]); print(ext)' $file);
         idx_name=$(printf "%0${nb_padding}d\n" $idx);  # Write index with padding
-        mv $file ${idx_name}_$1${extension};
+        if [ -n "$1" ]; then
+            mv $file ${idx_name}_$1${extension};
+        else
+            mv $file ${idx_name}$1${extension};
+        fi
         idx=$((idx+1));
     done;
 }
