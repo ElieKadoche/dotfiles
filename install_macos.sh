@@ -81,6 +81,7 @@ brew install --cask inkscape
 brew install --cask keepassxc
 brew install --cask libreoffice
 brew install --cask mpv
+brew install --cask openmtp
 brew install --cask rawtherapee
 brew install --cask sabaki
 brew install --cask skim
