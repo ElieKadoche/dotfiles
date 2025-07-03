@@ -509,7 +509,7 @@ main_update() {
         brew upgrade;
         brew upgrade --cask --greedy;
 
-        printf "\nPIP\n\n";
+        printf "---> PIP\n\n";
         python -m pip install --upgrade pip;
         pip-review --local --auto;
     fi
