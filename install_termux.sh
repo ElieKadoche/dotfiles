@@ -54,6 +54,7 @@ pkg install -y nodejs
 pkg install -y ollama
 pkg install -y openssh
 pkg install -y openssl-tool
+pkg install -y pandoc
 pkg install -y pastel
 pkg install -y patchelf
 pkg install -y pwgen
