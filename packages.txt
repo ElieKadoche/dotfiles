@@ -16,6 +16,7 @@ humanize
 hyperopt
 ipdb
 isort
+jax
 jupyter
 kaleido
 matplotlib
@@ -32,6 +33,7 @@ pettingzoo
 Pillow
 pip-review
 plotly
+pufferlib
 py_wake
 pybind11
 pycodestyle
