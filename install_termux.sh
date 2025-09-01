@@ -70,6 +70,7 @@ pkg install -y texlab
 pkg install -y tmux
 pkg install -y tor
 pkg install -y tree
+pkg install -y tree-sitter
 pkg install -y unrar
 pkg install -y unzip
 pkg install -y zip
