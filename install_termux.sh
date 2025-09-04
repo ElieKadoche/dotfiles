@@ -14,6 +14,7 @@ pkg install -y neovim
 
 # Activate storage
 termux-setup-storage
+mkdir $HOME/storage/shared/data
 
 # Launch common script
 ./install_apps_common.sh
