@@ -431,13 +431,12 @@ oo() {
 alias gitc="git cherry -v";
 alias gitp="git pull";
 alias gits="git status";
-alias gitsi="git status --ignored";
 alias gitu="git config --get remote.origin.url";
 
 # Simple functions
 gitd_() { git add -A; git commit -m "Done"; git push; }
 gitpp() { for i in */.git; do ( echo $i; cd $i/..; git pull; ); done; }
-gitss() { for i in */.git; do ( echo "-----> " $i; cd $i/../; git status; ); done; }
+gitss() { for i in */.git; do ( echo "-----> " $i; cd $i/../; git status --ignored; ); done; }
 
 # Execute git pull on folders
 _private_git_command() {
