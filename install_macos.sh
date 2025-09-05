@@ -55,6 +55,7 @@ brew install poppler
 brew install pwgen
 brew install rsync
 brew install ruby
+brew install scrcpy
 brew install screen
 brew install stylua
 brew install tesseract
