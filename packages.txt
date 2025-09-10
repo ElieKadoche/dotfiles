@@ -1,8 +1,6 @@
 ale-py
-atari-py
 autopep8
 bandit
-box2d.py
 build
 configparser
 dash
