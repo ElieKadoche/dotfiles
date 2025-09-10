@@ -14,7 +14,7 @@ brew install zsh
 chsh -s /usr/local/bin/zsh
 
 # Check Python with system version
-brew install python@3.12
+brew install python3
 
 # Install Brew packages
 brew install bibtex-tidy
