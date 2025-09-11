@@ -308,11 +308,6 @@ meteo() {
     curl v2.wttr.in/paris;
 }
 
-# Convert PDF file to EPS file
-pdf2eps() {
-    gs -q -dNOCACHE -dNOPAUSE -dBATCH -dSAFER -sDEVICE=eps2write -sOutputFile=$1.eps $1.pdf;
-}
-
 # Create a password of size $1
 pwgenn() { pwgen -cny --secure $1 1 | pbcopy; }
 
@@ -322,9 +317,6 @@ pyclean() {
     find . -name "__pycache__" -ls -delete;
     find . -name ".pytest_cache" -ls -exec rm -rf "{}" \;
 }
-
-# Remove prefix from files
-removePrefix() { for file in $1*; do mv "$file" "${file#$1}"; done; }
 
 # Rename all files in a folder
 # ls -tr: oldest modified file will have index 0
@@ -364,7 +356,6 @@ scpp() { scp -r -p -P $_SSH_PORT $1 $_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/Downloads;
 
 # Functions to download videos (format index, link)
 yyy() { yt-dlp --verbose --output "%(title)s.mp3" $2 -f $1 -x --audio-format "mp3" --rm-cache-dir; }
-
 
 # fzf
 # ------------------------------------------
