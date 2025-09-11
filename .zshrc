@@ -206,7 +206,6 @@ alias vim=nvim;
 # The rsync command is powerful but dangerous if misused
 # Always add --dry-run if you are unsure of your actions
 # Do not use rsync on git folders, use gitpp command instead
-# Arguments --> $1 disk name and $2 dry (eventually)
 bbb() {
     if [[ "$1" = "android" ]]; then
         rsync -vruh --delete --iconv=utf-8,utf-8-mac --rsync-path=/opt/homebrew/bin/rsync --exclude={"/backup/*","/git_apps/*","/miscellaneous/*"} -e "ssh -p $_SSH_PORT" $_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/data/ $ORIGIN/;
