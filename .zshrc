@@ -204,15 +204,15 @@ alias vim=nvim;
 
 # !!!!! WARNING !!!!!
 # The rsync command is powerful but dangerous if misused
-# Always add --dry-run if you are unsure of your actions
-# Do not use rsync on git folders, use gitpp command instead
+# Always add -n (--dry-run) if you are unsure of your actions
+# The best sync method is -c (--checksum), but it is costly
 bbb() {
     if [[ "$1" = "android" ]]; then
-        rsync -vruh --delete --iconv=utf-8,utf-8-mac --rsync-path=/opt/homebrew/bin/rsync --exclude={"/backup/*","/git_apps/*","/miscellaneous/*"} -e "ssh -p $_SSH_PORT" $_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/data/ $ORIGIN/;
+        rsync -ivhc --cc=xxh128 --recursive --delete --iconv=utf-8,utf-8-mac --rsync-path=/opt/homebrew/bin/rsync --exclude={"/backup/*","/git_apps/*","/miscellaneous/*"} -e "ssh -p $_SSH_PORT" $_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/data/ $ORIGIN/;
     elif [[ "$1" = "backup" ]]; then
-        rsync -vrulpEh --delete --iconv=utf-8,utf-8-mac --exclude={"/backup/completed/*","/documents/*","/git_apps/*"} $ORIGIN/ /Volumes/backup/data/;
+        rsync -ivh --times --links --recursive --delete --iconv=utf-8,utf-8-mac --exclude={"/backup/completed/*","/documents/*","/git_apps/*"} $ORIGIN/ /Volumes/backup/data/;
     elif [[ "$1" = "safety" ]]; then
-        rsync -vrulpEh --delete --exclude={"/backup/completed/*","/git_apps/*"} $ORIGIN/ /Volumes/safety/data/;
+        rsync -ivh --times --links --recursive --delete --exclude={"/backup/completed/*","/git_apps/*"} $ORIGIN/ /Volumes/safety/data/;
     fi
 }
 
