@@ -93,7 +93,6 @@ brew install --cask tor-browser
 brew install --cask transmission
 brew install --cask vlc
 brew install --cask whatsapp
-brew install --cask zoom
 
 # Install fonts
 brew tap homebrew/cask-fonts
