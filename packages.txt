@@ -49,6 +49,7 @@ regex
 requests
 rich
 ruff
+sbx-rl
 scikit-image
 scikit-learn
 scikit-optimize
