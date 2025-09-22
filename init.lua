@@ -546,7 +546,7 @@ require("lazy").setup({
             -- Setup each server using lspconfig directly
             for name, config in pairs(servers) do
                 config.capabilities = vim.tbl_deep_extend("force", {}, capabilities, config.capabilities or {})
-                require("lspconfig")[name].setup(config)
+                vim.lsp.config(name, config)
             end
         end,
     },
