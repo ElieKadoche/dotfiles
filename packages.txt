@@ -40,6 +40,7 @@ pygame
 pygments
 pytest
 python-lsp-isort
+python-lsp-ruff
 python-lsp-server[all]
 pytorch_forecasting
 pytorchcv
