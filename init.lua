@@ -356,6 +356,27 @@ require("lazy").setup({
             opts = {},
         },
 
+        -- oil.nvim
+        -- ------------------------------------------
+        -- ------------------------------------------
+        {
+            "stevearc/oil.nvim",
+            ---@module "oil"
+            ---@type oil.SetupOpts
+            lazy = false,
+            opts = {
+                default_file_explorer = true,
+                delete_to_trash = false,
+                view_options = { show_hidden = true },
+                columns = {
+                    "icon",
+                    "permissions",
+                    "size",
+                    "mtime",
+                },
+            },
+        },
+
         -- nvim-lspconfig
         -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
         -- ------------------------------------------
