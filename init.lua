@@ -221,6 +221,7 @@ require("lazy").setup({
                     "gitattributes",
                     "gitcommit",
                     "gitignore",
+                    "html",
                     "lua",
                     "make",
                     "markdown",
