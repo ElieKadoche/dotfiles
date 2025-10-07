@@ -433,6 +433,15 @@ require("lazy").setup({
                     },
                 }
 
+                -- clangd
+                vim.lsp.config("clangd", {
+                    capabilities = capabilities,
+                    on_attach = on_attach,
+                    cmd = { "clangd", "--background-index", "--clang-tidy", "--log=verbose" },
+                    filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
+                })
+                vim.lsp.enable("clangd")
+
                 -- ltex-ls-plus
                 vim.lsp.config("ltex", {
                     capabilities = capabilities,
@@ -473,7 +482,7 @@ require("lazy").setup({
                         Lua = {
                             completion = { callSnippet = "Replace" },
                             diagnostics = { globals = { "vim" } },
-                            format = { enbale = true },
+                            format = { enable = true },
                             workspace = { checkThirdParty = false },
                         },
                     },
