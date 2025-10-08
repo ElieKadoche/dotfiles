@@ -10,6 +10,8 @@ fi
 # Custom prompt
 PROMPT='%F{green}%m@%n[%D{%d/%m/%y}-%D{%I:%M:%S%p}]%F{white}(%~)%f%F{green}$%f'
 
+# EZA_CONFIG_DIR=="~/.config/eza"
+
 # Vim bindkeys
 bindkey -v;
 
@@ -169,9 +171,10 @@ setopt RM_STAR_SILENT
 # ------------------------------------------
 # ------------------------------------------
 
-# Complete and small ls
-alias l="ls --all --author --color=auto --group-directories-first --human-readable --size -lv";
-alias ll="ls -1 -a -v --group-directories-first";
+# Complete and small ls with specific colors
+export LS_COLORS=$LS_COLORS:"di=0;31:fi=0;97:ex=0;97:no=0;90:"
+alias l="ls --all --author --color=auto --group-directories-first --human-readable -l --size -v -1";
+alias ll="ls --all --color=auto --group-directories-first -v -1";
 
 # Open Firefox with default websites
 alias fff="nohup firefox $ORIGIN/documents/internet/{google/mail.html,google/calendar.html} > /dev/null 2>&1 &; disown";
