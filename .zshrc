@@ -172,7 +172,7 @@ setopt RM_STAR_SILENT
 # ------------------------------------------
 
 # Complete and small ls with specific colors
-export LS_COLORS=$LS_COLORS:"di=0;31:fi=0;97:ex=0;97:no=0;90:"
+export LS_COLORS=$LS_COLORS:"di=1;97:fi=0;97:ex=0;97:no=0;90:"
 alias l="ls --all --author --color=auto --group-directories-first --human-readable -l --size -v -1";
 alias ll="ls --all --color=auto --group-directories-first -v -1";
 
