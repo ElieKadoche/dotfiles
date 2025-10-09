@@ -304,12 +304,6 @@ getHistory() { history | awk '{print $2}' | sort | uniq -c | sort -nr | head -n 
 # Special grep for projects
 grepp() { grep -R "$1" . --ignore-case --exclude-dir={.git,.venv,data,docs,materials,resources}; }
 
-# Meteo
-meteo() {
-    curl wttr.in;
-    curl v2.wttr.in/paris;
-}
-
 # Create a password of size $1
 pwgenn() { pwgen -cny --secure $1 1 | pbcopy; }
 
