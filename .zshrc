@@ -8,9 +8,7 @@ elif [[ $(uname -o) = "Darwin" ]]; then
 fi
 
 # Custom prompt
-PROMPT='%F{green}%m@%n[%D{%d/%m/%y}-%D{%I:%M:%S%p}]%F{white}(%~)%f%F{green}$%f'
-
-# EZA_CONFIG_DIR=="~/.config/eza"
+PROMPT="%F{green}%m@%n[%D{%d/%m/%y}-%D{%I:%M:%S%p}]%F{white}(%~)%f%F{green}$%f"
 
 # Vim bindkeys
 bindkey -v;
@@ -27,8 +25,6 @@ if [[ $_SYSTEM = "linux" ]]; then
     alias pbcopy="xclip -selection clipboard";
     alias pbpaste="xclip -selection clipboard -o";
     export PATH="$HOME/.local/bin:$PATH";
-    export PATH=/usr/local/cuda/bin${PATH:+:${PATH}};
-    export LD_LIBRARY_PATH=/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}};
 
 # Termux (Android)
 elif [[ $_SYSTEM = "android" ]]; then
@@ -52,7 +48,6 @@ elif [[ $_SYSTEM = "android" ]]; then
 elif [[ $_SYSTEM = "darwin" ]]; then
     ORIGIN="$HOME/data"
     alias sed="gsed";
-    alias rmtrash="rm -rf ~/.Trash/*";
     alias rmdsstore="find . -type f -name '*.DS_Store' -ls -delete"
     export PATH="/opt/homebrew/opt/openjdk/bin:$PATH";
     export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
@@ -171,16 +166,16 @@ setopt RM_STAR_SILENT
 # ------------------------------------------
 # ------------------------------------------
 
-# Complete and small ls with specific colors
-export LS_COLORS=$LS_COLORS:"di=1;97:fi=0;97:ex=0;97:no=0;90:"
-alias l="ls --all --author --color=auto --group-directories-first --human-readable -l --size -v -1";
-alias ll="ls --all --color=auto --group-directories-first -v -1";
+# Display CSV files
+alias csvv="vi -c 'set nowrap' -c 'set scrolloff=5' -c 'set number' -c '1split | wincmd w'"
 
 # Open Firefox with default websites
 alias fff="nohup firefox $ORIGIN/documents/internet/{google/mail.html,google/calendar.html} > /dev/null 2>&1 &; disown";
 
-# Display markdown files in terminal
-alias mdd="python -m rich.markdown";
+# Complete and small ls with specific colors
+export LS_COLORS=$LS_COLORS:"di=1;97:fi=0;97:ex=0;97:no=0;90:"
+alias l="ls --all --author --color=auto --group-directories-first --human-readable -l --size -v -1";
+alias ll="ls --all --color=auto --group-directories-first -v -1";
 
 # Music
 mpva() {find $ORIGIN/musics -type f -exec mpv --shuffle --no-video {} +}
@@ -194,7 +189,6 @@ alias ..="cd ../";
 alias :q="exit";
 alias duu="du -ah --max-depth=1 . | sort -hr";
 alias e="exit";
-alias lpl="python $ORIGIN/git_apps/lesspass/cli/lesspass/core.py";
 alias m="cd $ORIGIN";
 alias rm__="find . -name '._*' -ls -delete";
 alias rmr="rm -rf";
@@ -204,6 +198,13 @@ alias vim=nvim;
 # Backup
 # ------------------------------------------
 # ------------------------------------------
+
+# Private SSH variables are in a .zsh file located in $ZSH_CUSTOM
+alias ssh0="ssh $_SSH_USER_NAME@$_SSH_PUBLIC_IP -p $_SSH_PORT";
+alias sshF="sshfs $_SSH_USER_NAME@$_SSH_PUBLIC_IP: -p $_SSH_PORT ssh_folder";
+alias sshX="ssh -X $_SSH_USER_NAME@$_SSH_PUBLIC_IP -p $_SSH_PORT";
+sshL() { ssh -L 16006:127.0.0.1:$1 $_SSH_USER_NAME@$_SSH_PUBLIC_IP -p $_SSH_PORT; }
+scpp() { scp -r -p -P $_SSH_PORT $1 $_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/Downloads; }
 
 # !!!!! WARNING !!!!!
 # The rsync command is powerful but dangerous if misused
@@ -225,7 +226,7 @@ bbb() {
 
 # Clear string: replace [spaces / tabs / new lines], special characters, etc., by _, and remove capital letters
 clearString() {
-    echo $1 | sed -z 's/\n/_/g' | sed -E -e 's/-/ /g' | sed -E -e "s/'/ /g" | sed -E -e 's/\: |\-|\, |\; |\. /_/g' | sed -E -e 's/[[:blank:]]+/_/g' | sed -e 's/\(.*\)/\L\1/' | sed 's/.$//' | pbcopy;
+    echo $1 | sed -z "s/\n/_/g" | sed -E -e "s/-/ /g" | sed -E -e "s/'/ /g" | sed -E -e "s/\: |\-|\, |\; |\. /_/g" | sed -E -e "s/[[:blank:]]+/_/g" | sed -e "s/\(.*\)/\L\1/" | sed "s/.$//" | pbcopy;
 }
 
 # Clear string of all files present in current path
@@ -265,41 +266,24 @@ countdown() {
 # Copy folder with progress bar
 cpr() { rsync --archive --human-readable --info=progress2 $1 $2; }
 
-# Display CSV files
-alias csvv='vi -c "set nowrap" -c "set scrolloff=5" -c "set number" -c "1split | wincmd w"'
-
 # Find $1 largest files
-# duuu() { find . -type f -printf '%s %p\n' | sort -nr | head -$1; }
 duuu() { find . -type f -exec du -h {} + | sort -rh | head -n $1; }
 
 # Fatal kill
-fatalKill() { ps aux | grep $1 | grep -v grep | awk '{print $2}' | xargs kill -9; }
-
-# Kill Ray processes
-fatalKillRay() {
-    fatalKill ray::IDLE;
-    fatalKill ray::Reanalyse;
-    fatalKill ray::ReplayBuffer;
-    fatalKill ray::RolloutWorker;
-    fatalKill ray::SelfPlay;
-    fatalKill ray::SharedStorage;
-    fatalKill ray::Trainer;
-}
+fatalKill() { ps aux | grep $1 | grep -v grep | awk "{print $2}" | xargs kill -9; }
 
 # Find files and folders, case insensitive
 findd() { find . -iname "*$1*" 2>/dev/null; }
 
-# Find out the pid of a specified process
-# Note that the command name can be specified via a regex
-# E.g. findPid '/d$/' finds pids of all processes with names ending in 'd'
-# Without the 'sudo' it will only find processes of the current user
+# Find out the pid of a specified process (regex are working)
+# WARNING: without sudo it will only find processes of the current user
 findPID () { lsof -t -c "$@"; }
 
 # Find files of a given extension
 findSameExtension() { find . -iname \*.$1; }
 
 # Get command history
-getHistory() { history | awk '{print $2}' | sort | uniq -c | sort -nr | head -n $1; }
+getHistory() { history | awk "{print $2}" | sort | uniq -c | sort -nr | head -n $1; }
 
 # Special grep for projects
 grepp() { grep -R "$1" . --ignore-case --exclude-dir={.git,.venv,data,docs,materials,resources}; }
@@ -318,12 +302,11 @@ pyclean() {
 # ls -tr: oldest modified file will have index 0
 renameAll() {
     idx=0;
-    nb_files=$(($(ls -1 | wc -l) - 1));  # Because it begins with 0
-    nb_padding=$(echo "${#nb_files}");  # Number of 0 padding
+    nb_files=$(($(ls -1 | wc -l) - 1));
+    nb_padding=$(echo "${#nb_files}");
     find . -maxdepth 1 -type f | xargs -r ls -tr | while read file; do
-        # extension=`echo $file | sed -n -e 's/^.*\.//p'`;  # But without the point
-        extension=$(python -c 'import os, sys; _, ext = os.path.splitext(sys.argv[1]); print(ext)' $file);
-        idx_name=$(printf "%0${nb_padding}d\n" $idx);  # Write index with padding
+        extension=$(python -c "import os, sys; _, ext = os.path.splitext(sys.argv[1]); print(ext)" $file);
+        idx_name=$(printf "%0${nb_padding}d\n" $idx);
         if [ -n "$1" ]; then
             mv $file ${idx_name}_$1${extension};
         else
@@ -343,13 +326,6 @@ rmtex() {
     fi
 }
 
-# Private SSH variables are in a .zsh file located in $ZSH_CUSTOM
-alias ssh0="ssh $_SSH_USER_NAME@$_SSH_PUBLIC_IP -p $_SSH_PORT";
-alias sshF="sshfs $_SSH_USER_NAME@$_SSH_PUBLIC_IP: -p $_SSH_PORT ssh_folder";
-alias sshX="ssh -X $_SSH_USER_NAME@$_SSH_PUBLIC_IP -p $_SSH_PORT";
-sshL() { ssh -L 16006:127.0.0.1:$1 $_SSH_USER_NAME@$_SSH_PUBLIC_IP -p $_SSH_PORT; }
-scpp() { scp -r -p -P $_SSH_PORT $1 $_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/Downloads; }
-
 # Functions to download videos (format index, link)
 yyy() { yt-dlp --verbose --output "%(title)s.mp3" $2 -f $1 -x --audio-format "mp3" --rm-cache-dir; }
 
@@ -359,26 +335,26 @@ yyy() { yt-dlp --verbose --output "%(title)s.mp3" $2 -f $1 -x --audio-format "mp
 
 # Find directory
 cdd() {
-  IFS=$'\n' directories=($(find $ORIGIN/ -type d | fzf-tmux --query="$1" --multi --select-1 --exit-0))
+  IFS=$"\n" directories=($(find $ORIGIN/ -type d | fzf-tmux --query="$1" --multi --select-1 --exit-0))
   [[ -n "$directories" ]] && cd "${directories[@]}"
 }
 
 # Open firefox favorites with fzf
 ff() {
-  IFS=$'\n' files=($(find $ORIGIN/documents/internet  -name "*.html"| fzf-tmux --query="$1" --multi --select-1 --exit-0))
+  IFS=$"\n" files=($(find $ORIGIN/documents/internet  -name "*.html"| fzf-tmux --query="$1" --multi --select-1 --exit-0))
   [[ -n "$files" ]] && firefox "${files[@]}"
 }
 
 # Open firefox favorites with fzf (private window)
 ffp() {
-  IFS=$'\n' files=($(find $ORIGIN/documents/internet  -name "*.html"| fzf-tmux --query="$1" --multi --select-1 --exit-0))
+  IFS=$"\n" files=($(find $ORIGIN/documents/internet  -name "*.html"| fzf-tmux --query="$1" --multi --select-1 --exit-0))
   [[ -n "$files" ]] && firefox --private-window "${files[@]}"
 }
 
 # fkill - kill process (from fzf)
 fkill() {
   local pid
-  pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+  pid=$(ps -ef | sed 1d | fzf -m | awk "{print $2}")
 
   if [[ "x$pid" != "x" ]]
   then
@@ -400,13 +376,13 @@ FZF-EOF"
 
 # Open files with nvim
 vv() {
-  IFS=$'\n' files=($(find $ORIGIN/ -type f | fzf-tmux --query="$1" --multi --select-1 --exit-0))
+  IFS=$"\n" files=($(find $ORIGIN/ -type f | fzf-tmux --query="$1" --multi --select-1 --exit-0))
   [[ -n "$files" ]] && vim "${files[@]}"
 }
 
 # Open files (general)
 oo() {
-  IFS=$'\n' files=($(find . -type f | fzf-tmux --query="$1" --multi --select-1 --exit-0))
+  IFS=$"\n" files=($(find . -type f | fzf-tmux --query="$1" --multi --select-1 --exit-0))
   [[ -n "$files" ]] && open "${files[@]}"
 }
 
@@ -435,17 +411,6 @@ _private_git_command() {
         echo "";
     );
     done
-}
-
-# Clear all Git history
-_removeGithistory() {
-    URL_GIT=$(gitu)
-    rmr .git;
-    git init;
-    git add .;
-    git commit -m "Initial commit";
-    git remote add origin $URL_GIT;
-    git push --mirror --force;
 }
 
 # Argument is the command to execute (status, pull, etc.)
@@ -477,13 +442,9 @@ main_update() {
         sudo apt dist-upgrade;
         # sudo update-grub;  # Only if necessary
 
-        printf "---> SNAP\n";
-        sudo snap refresh;
-
         printf "---> PIP\n";
         python -m pip install --upgrade pip;
         pip-review --local --auto;
-
 
     elif [[ $_SYSTEM = "darwin" ]]; then
         printf "---> darwin\n";
@@ -513,21 +474,12 @@ main_compile() {
     python -m pip install $ORIGIN/git_apps/lesspass/cli;
 
     if [[ $_SYSTEM = "linux" ]]; then
-        printf "---> neovim\n";
-        cd $ORIGIN/git_apps/neovim;
-        sudo make CMAKE_BUILD_TYPE=RelWithDebInfo;
-        sudo make install;
-
         printf "---> Katago\n";
         cd $ORIGIN/git_apps/KataGo/cpp;
         if [[ ! -d "./build" ]]; then mkdir build; fi
         cd build;
         cmake .. -DUSE_BACKEND=CUDA -DCUDNN_INCLUDE_DIR=/usr/local/cuda/include -DCUDNN_LIBRARY=/usr/local/cuda/lib64/libcudnn.so
         make;
-
-        printf "---> fzf\n";
-        cd $ORIGIN/git_apps/fzf;
-        ./install --all --no-bash --no-zsh;
     fi
 
     cd $ORIGIN;
@@ -559,12 +511,6 @@ main_clean() {
         sudo apt -y clean;
         sudo apt -y autoremove;
 
-        printf "---> SNAP\n";
-        LANG=en_US.UTF-8 snap list --all | awk '/disabled/{print $1, $3}' |
-        while read snapname revision; do
-            sudo snap remove "$snapname" --revision="$revision";
-        done
-
     elif [[ $_SYSTEM = "darwin" ]]; then
         printf "---> Homebrew\n";
         brew doctor;
@@ -586,8 +532,8 @@ main_all() {
     omz update;
 
     printf "---> neovim\n";
-    nvim --headless +"TSUpdate" +q
-    nvim --headless +"Lazy sync" +q
+    nvim --headless +"TSUpdate" +q;
+    nvim --headless +"Lazy sync" +q;
 
     if [[ $_SYSTEM = "linux" ]]; then
         sudo killall -3 gnome-shell;
@@ -603,6 +549,10 @@ source $ORIGIN/git_apps/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh;
 
 # TODO: which python version?
 alias python="python3";
+
+# Python functions
+alias mdd="python -m rich.markdown";
+alias lpl="python $ORIGIN/git_apps/lesspass/cli/lesspass/core.py";
 
 # Automatically activate virtual environment
 VENV_PATH="$HOME/.venv"
