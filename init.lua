@@ -116,7 +116,7 @@ vim.keymap.set("v", ">", ">gv", { silent = true })
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
 -- Compile tex document
-vim.keymap.set("n", "<leader>b", ":TexlabBuild<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>b", ":LspTexlabBuild<CR>", { noremap = true, silent = true })
 
 -- Disable arrow keys in normal mode
 -- vim.keymap.set("n", "<left>", "<cmd>echo "Use h to move!!"<CR>")
@@ -489,7 +489,7 @@ require("lazy").setup({
                 })
                 vim.lsp.enable("lua_ls")
 
-                -- python-language-server (+ ruff)
+                -- python-language-server
                 vim.lsp.config("pylsp", {
                     capabilities = capabilities,
                     on_attach = on_attach,
@@ -515,8 +515,8 @@ require("lazy").setup({
                                 pylint = { enabled = false },
                                 isort = { enabled = true },
                                 ruff = {
-                                    enabled = true,
-                                    formatEnabled = true,
+                                    enabled = false,
+                                    formatEnabled = false,
                                     lineLength = 79,
                                 },
                             },
@@ -526,31 +526,55 @@ require("lazy").setup({
                 vim.lsp.enable("pylsp")
 
                 -- ruff
-                -- vim.lsp.config("ruff", {
-                --     capabilities = capabilities,
-                --     on_attach = on_attach,
-                --     cmd = { "ruff", "server" },
-                --     filetypes = { "python" },
-                --     settings = {
-                --         ruff = {
-                --             configuration = { format = { ["quote-style"] = "single" } },
-                --             configurationPreference = "filesystemFirst",
-                --             lineLength = 79,
-                --             organizeImports = true,
-                --             showSyntaxErrors = true,
-                --             logLevel = "debug",
-                --             disableRuleComment = { enable = false },
-                --             lint = { enable = false, preview = true, },
-                --             format = { preview = true, },
-                --         },
-                --     },
-                -- })
-                -- vim.lsp.enable("ruff")
-
-                -- texlab
-                vim.lsp.config("texlab", {
+                vim.lsp.config("ruff", {
                     capabilities = capabilities,
                     on_attach = on_attach,
+                    cmd = { "ruff", "server" },
+                    filetypes = { "python" },
+                    settings = {
+                        ruff = {
+                            configuration = { format = { ["quote-style"] = "single" } },
+                            configurationPreference = "filesystemFirst",
+                            lineLength = 79,
+                            organizeImports = true,
+                            showSyntaxErrors = true,
+                            logLevel = "debug",
+                            disableRuleComment = { enable = false },
+                            lint = { enable = false, preview = true, },
+                            format = { preview = true, },
+                        },
+                    },
+                })
+                vim.lsp.enable("ruff")
+
+                -- texlab
+                local function buf_build(client, bufnr)
+                    local win = vim.api.nvim_get_current_win()
+                    local params = vim.lsp.util.make_position_params(win, client.offset_encoding)
+                    client:request("textDocument/build", params, function(err, result)
+                        if err then
+                            error(tostring(err))
+                        end
+                        local texlab_build_status = {
+                            [0] = "Success",
+                            [1] = "Error",
+                            [2] = "Failure",
+                            [3] = "Cancelled",
+                        }
+                        vim.notify('Build ' .. texlab_build_status[result.status], vim.log.levels.INFO)
+                    end, bufnr)
+                end
+                vim.lsp.config("texlab", {
+                    capabilities = capabilities,
+                    on_attach = function(client, bufnr)
+                        for _, cmd in ipairs({
+                            { name = "TexlabBuild", fn = buf_build, desc = "Build the current buffer" },
+                        }) do
+                            vim.api.nvim_buf_create_user_command(bufnr, "Lsp" .. cmd.name, function()
+                                cmd.fn(client, bufnr)
+                            end, { desc = cmd.desc })
+                        end
+                    end,
                     cmd = { "texlab" },
                     filetypes = { "tex", "plaintex", "bib" },
                     settings = {
