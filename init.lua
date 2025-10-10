@@ -310,6 +310,36 @@ require("lazy").setup({
             end,
         },
 
+        -- fzf-lua
+        -- ------------------------------------------
+        -- ------------------------------------------
+        {
+            "ibhagwan/fzf-lua",
+            config = function()
+                vim.keymap.set("n", "<leader>o", ":FzfLua files<cr>")
+            end,
+        },
+
+        -- git-conflict.nvim
+        -- ------------------------------------------
+        -- ------------------------------------------
+        {
+            "akinsho/git-conflict.nvim",
+            version = "*",
+            config = true,
+        },
+
+        -- indent-blankline.nvim
+        -- ------------------------------------------
+        -- ------------------------------------------
+        {
+            "lukas-reineke/indent-blankline.nvim",
+            main = "ibl",
+            ---@module "ibl"
+            ---@type ibl.config
+            opts = {},
+        },
+
         -- lualine.nvim
         -- ------------------------------------------
         -- ------------------------------------------
@@ -338,27 +368,6 @@ require("lazy").setup({
                     },
                 })
             end,
-        },
-
-        -- fzf-lua
-        -- ------------------------------------------
-        -- ------------------------------------------
-        {
-            "ibhagwan/fzf-lua",
-            config = function()
-                vim.keymap.set("n", "<leader>o", ":FzfLua files<cr>")
-            end,
-        },
-
-        -- indent-blankline.nvim
-        -- ------------------------------------------
-        -- ------------------------------------------
-        {
-            "lukas-reineke/indent-blankline.nvim",
-            main = "ibl",
-            ---@module "ibl"
-            ---@type ibl.config
-            opts = {},
         },
 
         -- oil.nvim
@@ -750,6 +759,10 @@ vim.api.nvim_set_hl(0, "BufferLineGroupLabel", { bg = "#000000", fg = "#000000" 
 vim.api.nvim_set_hl(0, "BufferLineSeparator", { bg = "#000000", fg = "#000000" })
 vim.api.nvim_set_hl(0, "BufferLineSeparatorSelected", { bg = "#000000", fg = "#000000" })
 vim.api.nvim_set_hl(0, "BufferLineSeparatorVisible", { bg = "#000000", fg = "#000000" })
+
+-- git-conflict
+vim.api.nvim_set_hl(0, "GitConflictCurrent", { bg = "#471002" })
+vim.api.nvim_set_hl(0, "GitConflictIncoming", { bg = "#170a45" })
 
 -- Update modeline
 -- vim: ts=4 sts=4 sw=4 et
