@@ -402,7 +402,6 @@ require("lazy").setup({
 
                 -- Shared on_attach
                 local on_attach = function(client, bufnr)
-                    -- Format on save
                     if client.supports_method("textDocument/formatting") then
                         vim.api.nvim_create_autocmd("BufWritePre", {
                             buffer = bufnr,
@@ -521,12 +520,14 @@ require("lazy").setup({
                                 },
                                 pydocstyle = { enabled = true },
                                 pyflakes = { enabled = false },
-                                pylint = { enabled = false },
+                                pylint = { enabled = true },
                                 isort = { enabled = true },
                                 ruff = {
-                                    enabled = false,
-                                    formatEnabled = false,
+                                    enabled = true,
+                                    formatEnabled = true,
                                     lineLength = 79,
+                                    ignore = { "W391" },
+                                    select = { "I", "E501" },
                                 },
                             },
                         },
@@ -535,26 +536,38 @@ require("lazy").setup({
                 vim.lsp.enable("pylsp")
 
                 -- ruff
-                vim.lsp.config("ruff", {
-                    capabilities = capabilities,
-                    on_attach = on_attach,
-                    cmd = { "ruff", "server" },
-                    filetypes = { "python" },
-                    settings = {
-                        ruff = {
-                            configuration = { format = { ["quote-style"] = "single" } },
-                            configurationPreference = "filesystemFirst",
-                            lineLength = 79,
-                            organizeImports = true,
-                            showSyntaxErrors = true,
-                            logLevel = "debug",
-                            disableRuleComment = { enable = false },
-                            lint = { enable = false, preview = true, },
-                            format = { preview = true, },
-                        },
-                    },
-                })
-                vim.lsp.enable("ruff")
+                -- vim.lsp.config("ruff", {
+                --     capabilities = capabilities,
+                --     on_attach = on_attach,
+                --     cmd = { "ruff", "server" },
+                --     filetypes = { "python" },
+                --     init_options = {
+                --         settings = {
+                --             configuration = { format = { ["quote-style"] = "double" } },
+                --             configurationPreference = "filesystemFirst",
+                --             lineLength = 79,
+                --             fixAll = true,
+                --             organizeImports = true,
+                --             showSyntaxErrors = true,
+                --             logLevel = "debug",
+                --             codeAction = {
+                --                 disableRuleComment = { enable = true },
+                --                 fixViolation = { enable = true },
+                --             },
+                --             lint = {
+                --                 enable = true,
+                --                 preview = true,
+                --                 select = { "I", "E501" },
+                --                 ignore = { "W391" },
+                --             },
+                --             format = {
+                --                 preview = true,
+                --                 backend = "internal",
+                --             },
+                --         },
+                --     },
+                -- })
+                -- vim.lsp.enable("ruff")
 
                 -- texlab
                 local function buf_build(client, bufnr)
