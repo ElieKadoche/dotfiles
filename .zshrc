@@ -469,7 +469,6 @@ main_update() {
 
         printf "---> PIP\n"
         python -m pip install --upgrade pip
-        pip-review --local --auto
 
     elif [[ $_SYSTEM = "darwin" ]]; then
         printf "---> darwin\n"
@@ -483,7 +482,6 @@ main_update() {
 
         printf "---> PIP\n\n"
         python -m pip install --upgrade pip
-        pip-review --local --auto
     fi
 }
 
