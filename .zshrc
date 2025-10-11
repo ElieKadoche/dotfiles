@@ -468,9 +468,6 @@ main_update() {
         sudo apt dist-upgrade
         # sudo update-grub;  # Only if necessary
 
-        printf "---> PIP\n"
-        python -m pip install --upgrade pip
-
     elif [[ $_SYSTEM = "darwin" ]]; then
         printf "---> darwin\n"
         softwareupdate --install --all
@@ -480,10 +477,10 @@ main_update() {
         brew outdated
         brew upgrade
         brew upgrade --cask --greedy
-
-        printf "---> PIP\n\n"
-        python -m pip install --upgrade pip
     fi
+
+    printf "---> PIP\n"
+    python -m pip install --upgrade pip
 }
 
 # Main compile
