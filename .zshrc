@@ -388,7 +388,7 @@ oo() {
     [[ -n "$files" ]] && open "${files[@]}"
 }
 
-# Main git
+# Main git + python
 # ------------------------------------------
 # ------------------------------------------
 
@@ -435,6 +435,16 @@ main_git() {
     _private_git_command $ORIGIN/git_apps $1
     _private_git_command $ORIGIN/git_apps/_custom $1
     cd $ORIGIN
+}
+
+# Install / update python packages
+main_python() {
+    local failed=()
+    while IFS= read -r pkg || [[ -n $pkg ]]; do
+        [[ -z $pkg || $pkg == \#* ]] && continue
+        pip install --upgrade "$pkg" || failed+=("$pkg")
+    done <$ORIGIN/git_apps/_custom/dotfiles/packages.txt
+    ((${#failed[@]})) && echo "failed to install: ${failed[*]}" || echo "all packages installed"
 }
 
 # Main update
@@ -542,6 +552,7 @@ main_all() {
     main_git pull
     main_git status
     main_update
+    main_python
     main_compile
     main_clean
     omz update
