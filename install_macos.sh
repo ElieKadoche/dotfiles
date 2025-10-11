@@ -16,12 +16,14 @@ chsh -s /usr/local/bin/zsh
 # Check Python with system version
 brew install python3
 
+# Launch common script
+./install_apps_common.sh
+
 # Install Brew packages
+brew install bash-language-server
 brew install bibtex-tidy
-brew install box2d
 brew install clang-format
 brew install cmake
-brew install cmatrix
 brew install coreutils
 brew install curl
 brew install dos2unix
@@ -31,7 +33,6 @@ brew install gcc
 brew install ghostscript
 brew install git
 brew install gnu-sed
-brew install graphviz
 brew install htop
 brew install imagemagick
 brew install jpeg-turbo
@@ -41,7 +42,6 @@ brew install latexindent
 brew install ltex-ls-plus
 brew install lua
 brew install lua-language-server
-brew install meson
 brew install ncdu
 brew install neovim
 brew install nmap
@@ -50,13 +50,12 @@ brew install ollama
 brew install openjdk
 brew install openssh
 brew install pandoc
-brew install pastel
-brew install poppler
 brew install pwgen
 brew install rsync
 brew install ruby
 brew install scrcpy
 brew install screen
+brew install shfmt
 brew install stylua
 brew install tesseract
 brew install texlab
@@ -102,9 +101,6 @@ brew install --cask font-source-sans-pro
 # LaTeX
 # brew install texlive
 brew install --cask mactex
-
-# Apple toolbox for machine learning
-pip install coremltools
 
 # Change default parameters
 defaults write -g NSAutomaticWindowAnimationsEnabled -bool false

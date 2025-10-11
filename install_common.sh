@@ -1,8 +1,5 @@
 #!/bin/zsh
 
-# Create folder if it does not exist
-mkdir ~/.config
-
 # tmux configuration
 cp .tmux.conf ~
 
@@ -32,7 +29,7 @@ git config --global credential.helper store
 echo "Configuring neovim..."
 
 # Configuration
-mkdir ~/.config/nvim
+mkdir -p ~/.config/nvim
 cp init.lua ~/.config/nvim/init.lua
 
 # Python packages
