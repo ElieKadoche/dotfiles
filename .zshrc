@@ -1,17 +1,17 @@
 # Get system
 if [[ $(uname -o) = "GNU/Linux" ]]; then
-    _SYSTEM="linux";
+    _SYSTEM="linux"
 elif [[ $(uname -o) = "Android" ]]; then
-    _SYSTEM="android";
+    _SYSTEM="android"
 elif [[ $(uname -o) = "Darwin" ]]; then
-    _SYSTEM="darwin";
+    _SYSTEM="darwin"
 fi
 
 # Custom prompt
 PROMPT="%F{green}%m@%n[%D{%d/%m/%y}-%D{%I:%M:%S%p}]%F{white}(%~)%f%F{green}$%f"
 
 # Vim bindkeys
-bindkey -v;
+bindkey -v
 
 # System specific
 # ------------------------------------------
@@ -19,37 +19,37 @@ bindkey -v;
 
 # Linux
 if [[ $_SYSTEM = "linux" ]]; then
-    ORIGIN="/$HOME/data";
-    alias xx="xtrlock";
-    alias open="xdg-open";
-    alias pbcopy="xclip -selection clipboard";
-    alias pbpaste="xclip -selection clipboard -o";
-    export PATH="$HOME/.local/bin:$PATH";
+    ORIGIN="/$HOME/data"
+    alias xx="xtrlock"
+    alias open="xdg-open"
+    alias pbcopy="xclip -selection clipboard"
+    alias pbpaste="xclip -selection clipboard -o"
+    export PATH="$HOME/.local/bin:$PATH"
 
 # Termux (Android)
 elif [[ $_SYSTEM = "android" ]]; then
-    ORIGIN="$HOME/storage/shared/data";
-    alias mm="cd $HOME/storage/shared/Download";
-    alias pbcopy="termux-clipboard-set";
-    alias open="termux-open";
+    ORIGIN="$HOME/storage/shared/data"
+    alias mm="cd $HOME/storage/shared/Download"
+    alias pbcopy="termux-clipboard-set"
+    alias open="termux-open"
     ek() {
         # Do not display extra keys
         if [[ "$1" = 0 ]]; then
-            cfg="extra-keys = [[]]\nfullscreen = true";
+            cfg="extra-keys = [[]]\nfullscreen = true"
         # Display extra keys
         elif [[ "$1" = 1 ]]; then
-            cfg="extra-keys = [['F1','F2','F3','F4','F5','F6','F9','F12'], ['ESC','ALT','FN','/','PGUP','KEYBOARD','UP','DRAWER'], ['TAB','CTRL','HOME','|','PGDN','LEFT','DOWN','RIGHT']]\nfullscreen = true";
+            cfg="extra-keys = [['F1','F2','F3','F4','F5','F6','F9','F12'], ['ESC','ALT','FN','/','PGUP','KEYBOARD','UP','DRAWER'], ['TAB','CTRL','HOME','|','PGDN','LEFT','DOWN','RIGHT']]\nfullscreen = true"
         fi
-        echo "$cfg" > ~/.termux/termux.properties;
-        termux-reload-settings;
+        echo "$cfg" >~/.termux/termux.properties
+        termux-reload-settings
     }
 
 # MacOS darwin (M chips)
 elif [[ $_SYSTEM = "darwin" ]]; then
     ORIGIN="$HOME/data"
-    alias sed="gsed";
+    alias sed="gsed"
     alias rmdsstore="find . -type f -name '*.DS_Store' -ls -delete"
-    export PATH="/opt/homebrew/opt/openjdk/bin:$PATH";
+    export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
     export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
 fi
 
@@ -170,12 +170,12 @@ setopt RM_STAR_SILENT
 alias csvv="vi -c 'set nowrap' -c 'set scrolloff=5' -c 'set number' -c '1split | wincmd w'"
 
 # Open Firefox with default websites
-alias fff="nohup firefox $ORIGIN/documents/internet/{google/mail.html,google/calendar.html} > /dev/null 2>&1 &; disown";
+alias fff="nohup firefox $ORIGIN/documents/internet/{google/mail.html,google/calendar.html} > /dev/null 2>&1 &; disown"
 
 # Complete and small ls with specific colors
 export LS_COLORS=$LS_COLORS:"di=1;97:fi=0;97:ex=0;97:no=0;90:"
-alias l="ls --all --author --color=auto --group-directories-first --human-readable -l --size -v -1";
-alias ll="ls --all --color=auto --group-directories-first -v -1";
+alias l="ls --all --author --color=auto --group-directories-first --human-readable -l --size -v -1"
+alias ll="ls --all --color=auto --group-directories-first -v -1"
 
 # Music
 mpva() {find $ORIGIN/musics -type f -exec mpv --shuffle --no-video {} +}
@@ -184,25 +184,25 @@ mpvo() {find $ORIGIN/musics/others -type f -exec mpv --shuffle --no-video {} +}
 mpvs() {find $ORIGIN/musics -type f -ipath "*$1*" -exec mpv --shuffle --no-video {} +}
 
 # Others
-alias ...="cd ../../";
-alias ..="cd ../";
-alias :q="exit";
-alias duu="du -ah --max-depth=1 . | sort -hr";
-alias e="exit";
-alias m="cd $ORIGIN";
-alias rm__="find . -name '._*' -ls -delete";
-alias rmr="rm -rf";
-alias src="source ~/.zshrc";
-alias vim=nvim;
+alias ...="cd ../../"
+alias ..="cd ../"
+alias :q="exit"
+alias duu="du -ah --max-depth=1 . | sort -hr"
+alias e="exit"
+alias m="cd $ORIGIN"
+alias rm__="find . -name '._*' -ls -delete"
+alias rmr="rm -rf"
+alias src="source ~/.zshrc"
+alias vim=nvim
 
 # Backup
 # ------------------------------------------
 # ------------------------------------------
 
 # Private SSH variables are in a .zsh file located in $ZSH_CUSTOM
-alias ssh0="ssh $_SSH_USER_NAME@$_SSH_PUBLIC_IP -p $_SSH_PORT";
-alias sshF="sshfs $_SSH_USER_NAME@$_SSH_PUBLIC_IP: -p $_SSH_PORT ssh_folder";
-alias sshX="ssh -X $_SSH_USER_NAME@$_SSH_PUBLIC_IP -p $_SSH_PORT";
+alias ssh0="ssh $_SSH_USER_NAME@$_SSH_PUBLIC_IP -p $_SSH_PORT"
+alias sshF="sshfs $_SSH_USER_NAME@$_SSH_PUBLIC_IP: -p $_SSH_PORT ssh_folder"
+alias sshX="ssh -X $_SSH_USER_NAME@$_SSH_PUBLIC_IP -p $_SSH_PORT"
 sshL() { ssh -L 16006:127.0.0.1:$1 $_SSH_USER_NAME@$_SSH_PUBLIC_IP -p $_SSH_PORT; }
 scpp() { scp -r -p -P $_SSH_PORT $1 $_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/Downloads; }
 
@@ -212,11 +212,11 @@ scpp() { scp -r -p -P $_SSH_PORT $1 $_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/Downloads;
 # The best sync method is -c (--checksum), but it is costly
 bbb() {
     if [[ "$1" = "android" ]]; then
-        rsync -ivhc --cc=xxh128 --recursive --delete --iconv=utf-8,utf-8-mac --rsync-path=/opt/homebrew/bin/rsync --exclude={"/backup/*","/git_apps/*","/miscellaneous/*"} -e "ssh -p $_SSH_PORT" $_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/data/ $ORIGIN/;
+        rsync -ivhc --cc=xxh128 --recursive --delete --iconv=utf-8,utf-8-mac --rsync-path=/opt/homebrew/bin/rsync --exclude={"/backup/*","/git_apps/*","/miscellaneous/*"} -e "ssh -p $_SSH_PORT" $_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/data/ $ORIGIN/
     elif [[ "$1" = "backup" ]]; then
-        rsync -ivhc --cc=xxh128 --recursive --delete --iconv=utf-8,utf-8-mac --exclude={"/backup/completed/*","/documents/*","/git_apps/*"} $ORIGIN/ /Volumes/backup/data/;
+        rsync -ivhc --cc=xxh128 --recursive --delete --iconv=utf-8,utf-8-mac --exclude={"/backup/completed/*","/documents/*","/git_apps/*"} $ORIGIN/ /Volumes/backup/data/
     elif [[ "$1" = "safety" ]]; then
-        rsync -ivhc --cc=xxh128 --recursive --delete --exclude={"/backup/completed/*","/git_apps/*"} $ORIGIN/ /Volumes/safety/data/;
+        rsync -ivhc --cc=xxh128 --recursive --delete --exclude={"/backup/completed/*","/git_apps/*"} $ORIGIN/ /Volumes/safety/data/
     fi
 }
 
@@ -226,12 +226,15 @@ bbb() {
 
 # Clear string: replace [spaces / tabs / new lines], special characters, etc., by _, and remove capital letters
 clearString() {
-    echo $1 | sed -z "s/\n/_/g" | sed -E -e "s/-/ /g" | sed -E -e "s/'/ /g" | sed -E -e "s/\: |\-|\, |\; |\. /_/g" | sed -E -e "s/[[:blank:]]+/_/g" | sed -e "s/\(.*\)/\L\1/" | sed "s/.$//" | pbcopy;
+    echo $1 | sed -z "s/\n/_/g" | sed -E -e "s/-/ /g" | sed -E -e "s/'/ /g" | sed -E -e "s/\: |\-|\, |\; |\. /_/g" | sed -E -e "s/[[:blank:]]+/_/g" | sed -e "s/\(.*\)/\L\1/" | sed "s/.$//" | pbcopy
 }
 
 # Clear string of all files present in current path
 clearStringAll() {
-    for file_path in *; do (clearString $file_path; mv $file_path $(pbpaste)); done
+    for file_path in *; do (
+        clearString $file_path
+        mv $file_path $(pbpaste)
+    ); done
 }
 
 # Clear thumbnails folders
@@ -244,23 +247,23 @@ clearThumbnails() {
 # bibtex / biber: both can be used, depending on how the bibliography is made
 # A different compilator can be used, as pdflatex for example
 compiletex() {
-    lualatex "$1.tex";
-    biber "$1";
-    makeglossaries "$1";
-    makeindex $1.nlo -s nomencl.ist -o $1.nls;
-    lualatex "$1.tex";
-    lualatex "$1.tex";
+    lualatex "$1.tex"
+    biber "$1"
+    makeglossaries "$1"
+    makeindex $1.nlo -s nomencl.ist -o $1.nls
+    lualatex "$1.tex"
+    lualatex "$1.tex"
 }
 
 # Countdown function, argument is in seconds
 countdown() {
-    countdown=$1;
+    countdown=$1
     while [ $countdown -gt 0 ]; do
-        echo -ne "\r--> $countdown <-- ";
-        countdown=$((countdown - 1));
-        sleep 1;
+        echo -ne "\r--> $countdown <-- "
+        countdown=$((countdown - 1))
+        sleep 1
     done
-    echo -ne "\r--> 0 <-- \n";
+    echo -ne "\r--> 0 <-- \n"
 }
 
 # Copy folder with progress bar
@@ -277,7 +280,7 @@ findd() { find . -iname "*$1*" 2>/dev/null; }
 
 # Find out the pid of a specified process (regex are working)
 # WARNING: without sudo it will only find processes of the current user
-findPID () { lsof -t -c "$@"; }
+findPID() { lsof -t -c "$@"; }
 
 # Find files of a given extension
 findSameExtension() { find . -iname \*.$1; }
@@ -293,36 +296,36 @@ pwgenn() { pwgen -cny --secure $1 1 | pbcopy; }
 
 # Clean Python files
 pyclean() {
-    find . -name "*.pyc" -ls -delete;
-    find . -name "__pycache__" -ls -delete;
+    find . -name "*.pyc" -ls -delete
+    find . -name "__pycache__" -ls -delete
     find . -name ".pytest_cache" -ls -exec rm -rf "{}" \;
 }
 
 # Rename all files in a folder
 # ls -tr: oldest modified file will have index 0
 renameAll() {
-    idx=0;
-    nb_files=$(($(ls -1 | wc -l) - 1));
-    nb_padding=$(echo "${#nb_files}");
+    idx=0
+    nb_files=$(($(ls -1 | wc -l) - 1))
+    nb_padding=$(echo "${#nb_files}")
     find . -maxdepth 1 -type f | xargs -r ls -tr | while read file; do
-        extension=$(python -c "import os, sys; _, ext = os.path.splitext(sys.argv[1]); print(ext)" $file);
-        idx_name=$(printf "%0${nb_padding}d\n" $idx);
+        extension=$(python -c "import os, sys; _, ext = os.path.splitext(sys.argv[1]); print(ext)" $file)
+        idx_name=$(printf "%0${nb_padding}d\n" $idx)
         if [ -n "$1" ]; then
-            mv $file ${idx_name}_$1${extension};
+            mv $file ${idx_name}_$1${extension}
         else
-            mv $file ${idx_name}$1${extension};
+            mv $file ${idx_name}$1${extension}
         fi
-        idx=$((idx+1));
-    done;
+        idx=$((idx + 1))
+    done
 }
 
 # Clean Tex files, argument for maxdepth
 rmtex() {
-    find . -maxdepth $1 -name "main-blx.bib" -delete;
+    find . -maxdepth $1 -name "main-blx.bib" -delete
     if [[ $_SYSTEM = "darwin" ]]; then
-        find -E . -maxdepth $1 -regex ".*\.(aux|dvi|log|out|toc|bbl|blg|synctex.gz|acn|acr|alg|bcf|glg|glo|gls|ist|run.xml|nav|snm|vrb|fls|fdb_latexmk|brf|loc|soc|ilg|ind|nlo|nls|lof|lot|maf|mtc.*)" -delete;
+        find -E . -maxdepth $1 -regex ".*\.(aux|dvi|log|out|toc|bbl|blg|synctex.gz|acn|acr|alg|bcf|glg|glo|gls|ist|run.xml|nav|snm|vrb|fls|fdb_latexmk|brf|loc|soc|ilg|ind|nlo|nls|lof|lot|maf|mtc.*)" -delete
     else
-        find . -maxdepth $1 -regex ".*\.\(aux\|dvi\|log\|out\|toc\|bbl\|blg\|synctex.gz\|acn\|acr\|alg\|bcf\|glg\|glo\|gls\|ist\|run.xml\|nav\|snm\|vrb\|fls\|fdb_latexmk\|brf\|loc\|soc\|ilg\|ind\|nlo\|nls\|lof\|lot\|maf\|mtc.*\)" -delete;
+        find . -maxdepth $1 -regex ".*\.\(aux\|dvi\|log\|out\|toc\|bbl\|blg\|synctex.gz\|acn\|acr\|alg\|bcf\|glg\|glo\|gls\|ist\|run.xml\|nav\|snm\|vrb\|fls\|fdb_latexmk\|brf\|loc\|soc\|ilg\|ind\|nlo\|nls\|lof\|lot\|maf\|mtc.*\)" -delete
     fi
 }
 
@@ -335,39 +338,38 @@ yyy() { yt-dlp --verbose --output "%(title)s.mp3" $2 -f $1 -x --audio-format "mp
 
 # Find directory
 cdd() {
-  IFS=$"\n" directories=($(find $ORIGIN/ -type d | fzf-tmux --query="$1" --multi --select-1 --exit-0))
-  [[ -n "$directories" ]] && cd "${directories[@]}"
+    IFS=$"\n" directories=($(find $ORIGIN/ -type d | fzf-tmux --query="$1" --multi --select-1 --exit-0))
+    [[ -n "$directories" ]] && cd "${directories[@]}"
 }
 
 # Open firefox favorites with fzf
 ff() {
-  IFS=$"\n" files=($(find $ORIGIN/documents/internet  -name "*.html"| fzf-tmux --query="$1" --multi --select-1 --exit-0))
-  [[ -n "$files" ]] && firefox "${files[@]}"
+    IFS=$"\n" files=($(find $ORIGIN/documents/internet -name "*.html" | fzf-tmux --query="$1" --multi --select-1 --exit-0))
+    [[ -n "$files" ]] && firefox "${files[@]}"
 }
 
 # Open firefox favorites with fzf (private window)
 ffp() {
-  IFS=$"\n" files=($(find $ORIGIN/documents/internet  -name "*.html"| fzf-tmux --query="$1" --multi --select-1 --exit-0))
-  [[ -n "$files" ]] && firefox --private-window "${files[@]}"
+    IFS=$"\n" files=($(find $ORIGIN/documents/internet -name "*.html" | fzf-tmux --query="$1" --multi --select-1 --exit-0))
+    [[ -n "$files" ]] && firefox --private-window "${files[@]}"
 }
 
 # fkill - kill process (from fzf)
 fkill() {
-  local pid
-  pid=$(ps -ef | sed 1d | fzf -m | awk "{print $2}")
+    local pid
+    pid=$(ps -ef | sed 1d | fzf -m | awk "{print $2}")
 
-  if [[ "x$pid" != "x" ]]
-  then
-    echo $pid | xargs kill -${1:-9}
-  fi
+    if [[ "x$pid" != "x" ]]; then
+        echo $pid | xargs kill -${1:-9}
+    fi
 }
 
 # fshow - git commit browser (from fzf)
 fshow() {
-  git log --graph --color=always \
-      --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
-  fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
-      --bind "ctrl-m:execute:
+    git log --graph --color=always \
+        --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+        fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+            --bind "ctrl-m:execute:
                 (grep -o '[a-f0-9]\{7\}' | head -1 |
                 xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
                 {}
@@ -376,14 +378,14 @@ FZF-EOF"
 
 # Open files with nvim
 vv() {
-  IFS=$"\n" files=($(find $ORIGIN/ -type f | fzf-tmux --query="$1" --multi --select-1 --exit-0))
-  [[ -n "$files" ]] && vim "${files[@]}"
+    IFS=$"\n" files=($(find $ORIGIN/ -type f | fzf-tmux --query="$1" --multi --select-1 --exit-0))
+    [[ -n "$files" ]] && vim "${files[@]}"
 }
 
 # Open files (general)
 oo() {
-  IFS=$"\n" files=($(find . -type f | fzf-tmux --query="$1" --multi --select-1 --exit-0))
-  [[ -n "$files" ]] && open "${files[@]}"
+    IFS=$"\n" files=($(find . -type f | fzf-tmux --query="$1" --multi --select-1 --exit-0))
+    [[ -n "$files" ]] && open "${files[@]}"
 }
 
 # Main git
@@ -391,35 +393,48 @@ oo() {
 # ------------------------------------------
 
 # Aliases
-alias gitc="git cherry -v";
-alias gitp="git pull";
-alias gits="git status";
-alias gitu="git config --get remote.origin.url";
+alias gitc="git cherry -v"
+alias gitp="git pull"
+alias gits="git status"
+alias gitu="git config --get remote.origin.url"
 
 # Simple functions
-gitd_() { git add -A; git commit -m "Done"; git push; }
-gitpp() { for i in */.git; do ( echo $i; cd $i/..; git pull; ); done; }
-gitss() { for i in */.git; do ( echo "-----> " $i; cd $i/../; git status --ignored; ); done; }
+gitd_() {
+    git add -A
+    git commit -m "Done"
+    git push
+}
+gitpp() { for i in */.git; do (
+    echo $i
+    cd $i/..
+    git pull
+); done; }
+gitss() { for i in */.git; do (
+    echo "-----> " $i
+    cd $i/../
+    git status --ignored
+); done; }
 
 # Execute git pull on folders
 _private_git_command() {
-    cd $1;
-    for i in */.git; do (
-        printf "$i\n";
-        cd $i/..;
-        git $2;
-        echo "";
-    );
+    cd $1
+    for i in */.git; do
+        (
+            printf "$i\n"
+            cd $i/..
+            git $2
+            echo ""
+        )
     done
 }
 
 # Argument is the command to execute (status, pull, etc.)
 main_git() {
-    printf "MAIN GIT\n";
-    printf "------------------------------------------\n\n";
-    _private_git_command $ORIGIN/git_apps $1;
-    _private_git_command $ORIGIN/git_apps/_custom $1;
-    cd $ORIGIN;
+    printf "MAIN GIT\n"
+    printf "------------------------------------------\n\n"
+    _private_git_command $ORIGIN/git_apps $1
+    _private_git_command $ORIGIN/git_apps/_custom $1
+    cd $ORIGIN
 }
 
 # Main update
@@ -427,38 +442,38 @@ main_git() {
 # ------------------------------------------
 
 main_update() {
-    printf "MAIN UPDATE\n";
-    printf "------------------------------------------\n\n";
+    printf "MAIN UPDATE\n"
+    printf "------------------------------------------\n\n"
 
     if [[ $_SYSTEM = "android" ]]; then
-        printf "---> PKG\n";
-        pkg upgrade -y;
-        pkg update -y;
+        printf "---> PKG\n"
+        pkg upgrade -y
+        pkg update -y
 
     elif [[ $_SYSTEM = "linux" ]]; then
-        printf "---> APT\n";
-        sudo apt -y update;
-        sudo apt -y upgrade;
-        sudo apt dist-upgrade;
+        printf "---> APT\n"
+        sudo apt -y update
+        sudo apt -y upgrade
+        sudo apt dist-upgrade
         # sudo update-grub;  # Only if necessary
 
-        printf "---> PIP\n";
-        python -m pip install --upgrade pip;
-        pip-review --local --auto;
+        printf "---> PIP\n"
+        python -m pip install --upgrade pip
+        pip-review --local --auto
 
     elif [[ $_SYSTEM = "darwin" ]]; then
-        printf "---> darwin\n";
-        softwareupdate --install --all;
+        printf "---> darwin\n"
+        softwareupdate --install --all
 
-        printf "---> Homebrew\n";
-        brew update;
-        brew outdated;
-        brew upgrade;
-        brew upgrade --cask --greedy;
+        printf "---> Homebrew\n"
+        brew update
+        brew outdated
+        brew upgrade
+        brew upgrade --cask --greedy
 
-        printf "---> PIP\n\n";
-        python -m pip install --upgrade pip;
-        pip-review --local --auto;
+        printf "---> PIP\n\n"
+        python -m pip install --upgrade pip
+        pip-review --local --auto
     fi
 }
 
@@ -467,22 +482,22 @@ main_update() {
 # ------------------------------------------
 
 main_compile() {
-    printf "MAIN COMPILE\n";
-    printf "------------------------------------------\n\n";
+    printf "MAIN COMPILE\n"
+    printf "------------------------------------------\n\n"
 
-    printf "---> lesspass\n";
-    python -m pip install $ORIGIN/git_apps/lesspass/cli;
+    printf "---> lesspass\n"
+    python -m pip install $ORIGIN/git_apps/lesspass/cli
 
     if [[ $_SYSTEM = "linux" ]]; then
-        printf "---> Katago\n";
-        cd $ORIGIN/git_apps/KataGo/cpp;
+        printf "---> Katago\n"
+        cd $ORIGIN/git_apps/KataGo/cpp
         if [[ ! -d "./build" ]]; then mkdir build; fi
-        cd build;
+        cd build
         cmake .. -DUSE_BACKEND=CUDA -DCUDNN_INCLUDE_DIR=/usr/local/cuda/include -DCUDNN_LIBRARY=/usr/local/cuda/lib64/libcudnn.so
-        make;
+        make
     fi
 
-    cd $ORIGIN;
+    cd $ORIGIN
 }
 
 # Main clean
@@ -490,32 +505,32 @@ main_compile() {
 # ------------------------------------------
 
 main_clean() {
-    printf "MAIN CLEAN\n";
-    printf "------------------------------------------\n\n";
+    printf "MAIN CLEAN\n"
+    printf "------------------------------------------\n\n"
 
-    printf "---> PIP\n";
-    pip cache purge;
+    printf "---> PIP\n"
+    pip cache purge
 
     if [[ $_SYSTEM = "android" ]]; then
-        printf "---> PKG\n";
-        pkg autoclean;
-        pkg clean;
+        printf "---> PKG\n"
+        pkg autoclean
+        pkg clean
 
     elif [[ $_SYSTEM = "linux" ]]; then
-        printf "---> LOGS\n";
-        journalctl --disk-usage;
-        sudo journalctl --vacuum-time=1d;
+        printf "---> LOGS\n"
+        journalctl --disk-usage
+        sudo journalctl --vacuum-time=1d
 
-        printf "---> APT\n";
-        sudo apt -y autoclean;
-        sudo apt -y clean;
-        sudo apt -y autoremove;
+        printf "---> APT\n"
+        sudo apt -y autoclean
+        sudo apt -y clean
+        sudo apt -y autoremove
 
     elif [[ $_SYSTEM = "darwin" ]]; then
-        printf "---> Homebrew\n";
-        brew doctor;
-        brew cleanup;
-        brew autoremove;
+        printf "---> Homebrew\n"
+        brew doctor
+        brew cleanup
+        brew autoremove
     fi
 }
 
@@ -524,35 +539,35 @@ main_clean() {
 # ------------------------------------------
 
 main_all() {
-    main_git pull;
-    main_git status;
-    main_update;
-    main_compile;
-    main_clean;
-    omz update;
+    main_git pull
+    main_git status
+    main_update
+    main_compile
+    main_clean
+    omz update
 
-    printf "---> neovim\n";
-    nvim --headless +"TSUpdate" +q;
-    nvim --headless +"Lazy sync" +q;
+    printf "---> neovim\n"
+    nvim --headless +"TSUpdate" +q
+    nvim --headless +"Lazy sync" +q
 
     if [[ $_SYSTEM = "linux" ]]; then
-        sudo killall -3 gnome-shell;
+        sudo killall -3 gnome-shell
     fi
 }
 
 # Additional plugins
-source $ORIGIN/git_apps/zsh-autosuggestions/zsh-autosuggestions.zsh;
-source $ORIGIN/git_apps/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh;
+source $ORIGIN/git_apps/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $ORIGIN/git_apps/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # Python
 # ------------------------------------------
 
 # TODO: which python version?
-alias python="python3";
+alias python="python3"
 
 # Python functions
-alias mdd="python -m rich.markdown";
-alias lpl="python $ORIGIN/git_apps/lesspass/cli/lesspass/core.py";
+alias mdd="python -m rich.markdown"
+alias lpl="python $ORIGIN/git_apps/lesspass/cli/lesspass/core.py"
 
 # Automatically activate virtual environment
 VENV_PATH="$HOME/.venv"
@@ -563,4 +578,4 @@ fi
 # Most used commands are kept in a custom history
 # When a session is closed, history is reset to default
 # zsh_history_clear is declared in a .zsh file located in $ZSH_CUSTOM
-trap "zsh_history_clear" 0;
+trap "zsh_history_clear" 0
