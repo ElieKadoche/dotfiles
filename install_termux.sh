@@ -97,6 +97,6 @@ echo "Configuring Termux..."
 # Enable / disable extra keys (see ek custom function)
 
 # Download fira code font ttf file
-mv FiraCode-Retina.ttf ~/.termux/font.ttf
+cp FiraCode-Retina.ttf ~/.termux/font.ttf
 
 termux-reload-settings
