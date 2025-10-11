@@ -442,9 +442,26 @@ require("lazy").setup({
                 }
 
                 -- bashls
+                local on_attach_bashls = function(client, bufnr)
+                    local filename = vim.api.nvim_buf_get_name(bufnr)
+                    -- Detach bashls from .zsh_history files entirely
+                    if filename:match("%.zsh_history$") then
+                        vim.schedule(function() vim.lsp.buf_detach_client(bufnr, client.id) end)
+                        return
+                    end
+                    -- Normal on_attach function
+                    if client.supports_method("textDocument/formatting") then
+                        vim.api.nvim_create_autocmd("BufWritePre", {
+                            buffer = bufnr,
+                            callback = function()
+                                vim.lsp.buf.format({ async = false })
+                            end,
+                        })
+                    end
+                end
                 vim.lsp.config("bashls", {
                     capabilities = capabilities,
-                    on_attach = on_attach,
+                    on_attach = on_attach_bashls,
                     cmd = { "bash-language-server", "start" },
                     filetypes = { "bash", "sh", "zsh" },
                 })
@@ -579,7 +596,7 @@ require("lazy").setup({
                 -- vim.lsp.enable("ruff")
 
                 -- texlab
-                local function buf_build(client, bufnr)
+                local buf_build_texlab = function(client, bufnr)
                     local win = vim.api.nvim_get_current_win()
                     local params = vim.lsp.util.make_position_params(win, client.offset_encoding)
                     client:request("textDocument/build", params, function(err, result)
@@ -595,17 +612,18 @@ require("lazy").setup({
                         vim.notify('Build ' .. texlab_build_status[result.status], vim.log.levels.INFO)
                     end, bufnr)
                 end
+                local on_attach_texlab = function(client, bufnr)
+                    for _, cmd in ipairs({
+                        { name = "TexlabBuild", fn = buf_build_texlab, desc = "Build the current buffer" },
+                    }) do
+                        vim.api.nvim_buf_create_user_command(bufnr, "Lsp" .. cmd.name, function()
+                            cmd.fn(client, bufnr)
+                        end, { desc = cmd.desc })
+                    end
+                end
                 vim.lsp.config("texlab", {
                     capabilities = capabilities,
-                    on_attach = function(client, bufnr)
-                        for _, cmd in ipairs({
-                            { name = "TexlabBuild", fn = buf_build, desc = "Build the current buffer" },
-                        }) do
-                            vim.api.nvim_buf_create_user_command(bufnr, "Lsp" .. cmd.name, function()
-                                cmd.fn(client, bufnr)
-                            end, { desc = cmd.desc })
-                        end
-                    end,
+                    on_attach = on_attach_texlab,
                     cmd = { "texlab" },
                     filetypes = { "tex", "plaintex", "bib" },
                     settings = {
