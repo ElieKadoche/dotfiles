@@ -437,13 +437,14 @@ main_git() {
     cd $ORIGIN
 }
 
-# Install / update python packages
+# Install / update python packages from $1 files
+# WARNING: this function is NOT integrated to the main_all function
 main_python() {
     local failed=()
     while IFS= read -r pkg || [[ -n $pkg ]]; do
         [[ -z $pkg || $pkg == \#* ]] && continue
         pip install --upgrade "$pkg" || failed+=("$pkg")
-    done <$ORIGIN/git_apps/_custom/dotfiles/packages.txt
+    done <$1
     ((${#failed[@]})) && echo "failed to install: ${failed[*]}" || echo "all packages installed"
 }
 
@@ -550,7 +551,6 @@ main_all() {
     main_git pull
     main_git status
     main_update
-    main_python
     main_compile
     main_clean
     omz update
