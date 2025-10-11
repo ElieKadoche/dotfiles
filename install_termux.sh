@@ -30,7 +30,6 @@ pkg install -y binutils-is-llvm
 pkg install -y build-essential
 pkg install -y clang
 pkg install -y cmake
-pkg install -y cmatrix
 pkg install -y e2fsprogs
 pkg install -y ffmpeg
 pkg install -y fzf
@@ -60,6 +59,7 @@ pkg install -y pastel
 pkg install -y patchelf
 pkg install -y pwgen
 pkg install -y python
+pkg install -y python-numpy
 pkg install -y rsync
 pkg install -y ruby
 pkg install -y screen
@@ -86,14 +86,6 @@ termux-install-tl
 
 # Install specific packages
 pip3 install setuptools wheel packaging pyproject_metadata cython meson-python versioner
-
-# Check version
-python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")'
-
-# Install numpy and pandas
-# TODO: replace 3.12 value with actual version
-MATHLIB=m LDFLAGS="-lpython3.12" pip3 install --no-build-isolation --no-cache-dir numpy
-LDFLAGS="-lpython3.12" pip3 install --no-build-isolation --no-cache-dir pandas
 
 # Termux configuration
 # ------------------------------------------

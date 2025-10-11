@@ -3,6 +3,7 @@ bandit
 build
 configparser
 coremltools
+cython
 dash
 flake8
 floris
@@ -15,6 +16,7 @@ jax
 jupyter
 kaleido
 matplotlib
+meson-python
 neovim
 networkx
 numpy
@@ -22,6 +24,7 @@ ollama
 onnx
 onnxscript
 opencv-python
+packaging
 pandas
 pettingzoo
 Pillow
@@ -31,6 +34,7 @@ pybind11
 pycodestyle
 pydocstyle
 pygame
+pyproject_metadata
 pytest
 python-lsp-isort
 python-lsp-ruff
@@ -43,6 +47,7 @@ ruff
 sbx-rl
 scikit-learn
 scipy
+setuptools
 sphinx
 spotdl
 statsmodels
@@ -52,5 +57,7 @@ torch
 torch_geometric
 torchinfo
 tqdm
+versioner
+wheel
 windrose
 yt-dlp
