@@ -441,6 +441,15 @@ require("lazy").setup({
                     },
                 }
 
+                -- bashls
+                vim.lsp.config("bashls", {
+                    capabilities = capabilities,
+                    on_attach = on_attach,
+                    cmd = { "bash-language-server", "start" },
+                    filetypes = { "bash", "sh", "zsh" },
+                })
+                vim.lsp.enable("bashls")
+
                 -- clangd
                 vim.lsp.config("clangd", {
                     capabilities = capabilities,
