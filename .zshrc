@@ -17,7 +17,7 @@ bindkey -v
 # ------------------------------------------
 # ------------------------------------------
 
-# Linux
+# Linux (terminal)
 if [[ $_SYSTEM = "linux" ]]; then
     ORIGIN="/$HOME/data"
     alias xx="xtrlock"
@@ -26,7 +26,7 @@ if [[ $_SYSTEM = "linux" ]]; then
     alias pbpaste="xclip -selection clipboard -o"
     export PATH="$HOME/.local/bin:$PATH"
 
-# Termux (Android)
+# Android (termux
 elif [[ $_SYSTEM = "android" ]]; then
     ORIGIN="$HOME/storage/shared/data"
     alias mm="cd $HOME/storage/shared/Download"
@@ -44,7 +44,7 @@ elif [[ $_SYSTEM = "android" ]]; then
         termux-reload-settings
     }
 
-# MacOS darwin (M chips)
+# Darwin (terminal)
 elif [[ $_SYSTEM = "darwin" ]]; then
     ORIGIN="$HOME/data"
     alias sed="gsed"
