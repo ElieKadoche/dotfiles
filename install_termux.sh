@@ -63,6 +63,7 @@ pkg install -y python-numpy
 pkg install -y python-torch
 pkg install -y rsync
 pkg install -y ruby
+pkg install -y ruff
 pkg install -y rust
 pkg install -y screen
 pkg install -y stylua
