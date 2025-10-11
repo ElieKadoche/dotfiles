@@ -45,5 +45,4 @@ source ~/.venv/bin/activate
 
 # All packages will not work on Termux, be careful
 # Choose carefully which packages to install globally
-# Packages can be used globally, in a virtual environment, in a Docker container, etc.
-pip install -r python.txt
+main_python
