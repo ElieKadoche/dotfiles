@@ -613,12 +613,22 @@ require("lazy").setup({
                     end, bufnr)
                 end
                 local on_attach_texlab = function(client, bufnr)
+                    -- Custom build function
                     for _, cmd in ipairs({
                         { name = "TexlabBuild", fn = buf_build_texlab, desc = "Build the current buffer" },
                     }) do
                         vim.api.nvim_buf_create_user_command(bufnr, "Lsp" .. cmd.name, function()
                             cmd.fn(client, bufnr)
                         end, { desc = cmd.desc })
+                    end
+                    -- Normal on_attach function
+                    if client.supports_method("textDocument/formatting") then
+                        vim.api.nvim_create_autocmd("BufWritePre", {
+                            buffer = bufnr,
+                            callback = function()
+                                vim.lsp.buf.format({ async = false })
+                            end,
+                        })
                     end
                 end
                 vim.lsp.config("texlab", {
