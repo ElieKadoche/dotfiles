@@ -191,7 +191,7 @@ alias duu="du -ah --max-depth=1 . | sort -hr"
 alias e="exit"
 alias m="cd $ORIGIN"
 alias rm__="find . -name '._*' -ls -delete"
-alias rmr="rm -rf"
+alias rmr="rm -rfI"
 alias src="source ~/.zshrc"
 alias vim=nvim
 
