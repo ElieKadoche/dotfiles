@@ -177,6 +177,15 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     end,
 })
 
+-- Prevent editing in readonly mode
+vim.api.nvim_create_autocmd("BufEnter", {
+    callback = function()
+        if vim.o.readonly then
+            vim.opt_local.modifiable = false
+        end
+    end,
+})
+
 -- Install lazy
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
