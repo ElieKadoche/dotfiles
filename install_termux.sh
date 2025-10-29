@@ -37,6 +37,7 @@ pkg install -y ghostscript
 pkg install -y htop
 pkg install -y imagemagick
 pkg install -y iproute2
+pkg install -y keepassxc
 pkg install -y libandroid-execinfo
 pkg install -y libicu
 pkg install -y libopenblas
@@ -77,6 +78,7 @@ pkg install -y tree
 pkg install -y tree-sitter
 pkg install -y unrar
 pkg install -y unzip
+pkg install -y x11-repo
 pkg install -y zip
 
 # LaTeX
