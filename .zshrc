@@ -440,6 +440,7 @@ main_git() {
 # Install / update python packages from $1 files
 # WARNING: this function is NOT integrated to the main_all function
 main_python() {
+    python -m pip install --upgrade pip
     local failed=()
     while IFS= read -r pkg || [[ -n $pkg ]]; do
         [[ -z $pkg || $pkg == \#* ]] && continue
@@ -478,9 +479,6 @@ main_update() {
         brew upgrade
         brew upgrade --cask --greedy
     fi
-
-    printf "---> PIP\n"
-    python -m pip install --upgrade pip
 }
 
 # Main compile
