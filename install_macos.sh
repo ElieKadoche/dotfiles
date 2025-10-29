@@ -33,6 +33,7 @@ brew install gcc
 brew install ghostscript
 brew install git
 brew install gnu-sed
+brew install gnupg
 brew install htop
 brew install imagemagick
 brew install jpeg-turbo
