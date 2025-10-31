@@ -447,6 +447,7 @@ main_python() {
         pip install --upgrade "$pkg" || failed+=("$pkg")
     done <$1
     ((${#failed[@]})) && echo "failed to install: ${failed[*]}" || echo "all packages installed"
+    pip cache purge
 }
 
 # Main update
@@ -511,9 +512,6 @@ main_compile() {
 main_clean() {
     printf "MAIN CLEAN\n"
     printf "------------------------------------------\n\n"
-
-    printf "---> PIP\n"
-    pip cache purge
 
     if [[ $_SYSTEM = "android" ]]; then
         printf "---> PKG\n"
