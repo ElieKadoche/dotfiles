@@ -114,4 +114,4 @@ defaults write com.apple.screencapture location ~/Downloads
 
 # Others
 # Install https://github.com/textext/textext/releases
-# python setup.py --pdflatex-executable=$(which pdflatex) --skip-requirements-check
+# python setup.py --pdflatex-executable=$(which lualatex) --skip-requirements-check
