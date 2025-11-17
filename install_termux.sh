@@ -103,10 +103,4 @@ echo "Configuring Termux..."
 # Download fira code font ttf file
 cp FiraCode-Retina.ttf ~/.termux/font.ttf
 
-# Custom widgets
-mkdir -p /data/data/com.termux/files/home/.shortcuts
-chmod 700 -R /data/data/com.termux/files/home/.shortcuts
-touch /data/data/com.termux/files/home/.shortcuts/backup.sh
-touch /data/data/com.termux/files/home/.shortcuts/transfer.sh
-
 termux-reload-settings
