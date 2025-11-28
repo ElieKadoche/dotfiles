@@ -146,7 +146,7 @@ vim.keymap.set("n", "<leader>v", ":vsplit<CR>", { silent = true })
 vim.opt.spell = false
 vim.keymap.set("n", "<leader>sn", ":set nospell<CR>", { silent = true })
 vim.keymap.set("n", "<leader>sf", ":set spelllang=fr<CR>:set spell<CR>", { silent = true })
-vim.keymap.set("n", "<leader>se", ":set spelllang=en<CR>:set spell<CR>", { silent = true })
+vim.keymap.set("n", "<leader>se", ":set spelllang=en_us<CR>:set spell<CR>", { silent = true })
 
 -- Move around buffers
 vim.keymap.set("n", "<leader>h", ":bp<CR>", { silent = true })
@@ -797,6 +797,12 @@ vim.api.nvim_set_hl(0, "@variable.python", { bg = "#000000", fg = "#00ffff" })
 vim.api.nvim_set_hl(0, "Constant", { bg = "#000000", fg = "#729fcf" })
 vim.api.nvim_set_hl(0, "Special", { bg = "#000000", fg = "#00ff00" })
 vim.api.nvim_set_hl(0, "Statement", { bg = "#000000", fg = "#ff00ff" })
+
+-- Spelling
+vim.api.nvim_set_hl(0, "SpellBad", { underline = true, sp = "#ff0000" })
+vim.api.nvim_set_hl(0, "SpellCap", { underline = true, sp = "#ff0000" })
+vim.api.nvim_set_hl(0, "SpellLocal", { underline = true, sp = "#ff0000" })
+vim.api.nvim_set_hl(0, "SpellRare", { underline = true, sp = "#ff0000" })
 
 -- nvim-tree
 vim.api.nvim_set_hl(0, "NvimTreeExecFile", { fg = "#ffffff" })
