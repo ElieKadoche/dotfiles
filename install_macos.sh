@@ -76,7 +76,6 @@ brew install xclip
 brew install --cask adobe-acrobat-reader
 brew install --cask android-platform-tools
 brew install --cask audacity
-brew install --cask calibre
 brew install --cask discord
 brew install --cask firefox
 brew install --cask google-chrome
