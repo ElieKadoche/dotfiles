@@ -420,6 +420,14 @@ require("lazy").setup({
                 },
             },
             cmd = { "CsvViewEnable", "CsvViewDisable", "CsvViewToggle" },
+            init = function()
+                vim.api.nvim_create_autocmd("FileType", {
+                    pattern = "csv",
+                    callback = function()
+                        vim.cmd("CsvViewEnable")
+                    end,
+                })
+            end,
         },
 
         -- nvim-lspconfig
