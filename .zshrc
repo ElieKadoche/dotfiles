@@ -430,7 +430,7 @@ _private_git_command() {
 
 # Argument is the command to execute (status, pull, etc.)
 main_git() {
-    printf "MAIN GIT\n"
+    printf "\nMAIN GIT\n"
     printf "------------------------------------------\n\n"
     _private_git_command $ORIGIN/git_apps $1
     _private_git_command $ORIGIN/git_apps/_custom $1
@@ -455,7 +455,7 @@ main_python() {
 # ------------------------------------------
 
 main_update() {
-    printf "MAIN UPDATE\n"
+    printf "\nMAIN UPDATE\n"
     printf "------------------------------------------\n\n"
 
     if [[ $_SYSTEM = "android" ]]; then
@@ -487,7 +487,7 @@ main_update() {
 # ------------------------------------------
 
 main_compile() {
-    printf "MAIN COMPILE\n"
+    printf "\nMAIN COMPILE\n"
     printf "------------------------------------------\n\n"
 
     printf "---> lesspass\n"
@@ -510,7 +510,7 @@ main_compile() {
 # ------------------------------------------
 
 main_clean() {
-    printf "MAIN CLEAN\n"
+    printf "\nMAIN CLEAN\n"
     printf "------------------------------------------\n\n"
 
     if [[ $_SYSTEM = "android" ]]; then
