@@ -344,13 +344,13 @@ cdd() {
 
 # Open firefox favorites with fzf
 ff() {
-    IFS=$"\n" files=($(find $ORIGIN/documents/internet -name "*.html" | fzf-tmux --query="$1" --multi --select-1 --exit-0))
+    IFS=$'\n' files=($(find $ORIGIN/documents/internet -name "*.html" | fzf-tmux --query="$1" --multi --select-1 --exit-0))
     [[ -n "$files" ]] && firefox "${files[@]}"
 }
 
 # Open firefox favorites with fzf (private window)
 ffp() {
-    IFS=$"\n" files=($(find $ORIGIN/documents/internet -name "*.html" | fzf-tmux --query="$1" --multi --select-1 --exit-0))
+    IFS=$'\n' files=($(find $ORIGIN/documents/internet -name "*.html" | fzf-tmux --query="$1" --multi --select-1 --exit-0))
     [[ -n "$files" ]] && firefox --private-window "${files[@]}"
 }
 
