@@ -78,6 +78,7 @@ pkg install -y tree
 pkg install -y tree-sitter
 pkg install -y unrar
 pkg install -y unzip
+pkg install -y uv
 pkg install -y x11-repo
 pkg install -y zip
 
