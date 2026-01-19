@@ -32,6 +32,7 @@ plotly
 py_wake
 pybind11
 pycodestyle
+pydantic
 pydocstyle
 pygame
 pyproject_metadata

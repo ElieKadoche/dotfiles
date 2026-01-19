@@ -22,6 +22,7 @@ Pillow
 plotly
 pybind11
 pycodestyle
+pydantic
 pydocstyle
 pyproject_metadata
 pytest
