@@ -441,13 +441,9 @@ main_git() {
 # WARNING: this function is NOT integrated to the main_all function
 main_python() {
     python -m pip install --upgrade pip
-    local failed=()
-    while IFS= read -r pkg || [[ -n $pkg ]]; do
-        [[ -z $pkg || $pkg == \#* ]] && continue
-        pip install --upgrade "$pkg" || failed+=("$pkg")
-    done <$1
-    ((${#failed[@]})) && echo "failed to install: ${failed[*]}" || echo "all packages installed"
-    pip cache purge
+    uv pip install --upgrade -r $1
+    uv pip install $ORIGIN/git_apps/lesspass/cli
+    uv cache clean
 }
 
 # Main update
@@ -489,9 +485,6 @@ main_update() {
 main_compile() {
     printf "\nMAIN COMPILE\n"
     printf "------------------------------------------\n\n"
-
-    printf "---> lesspass\n"
-    python -m pip install $ORIGIN/git_apps/lesspass/cli
 
     if [[ $_SYSTEM = "linux" ]]; then
         printf "---> Katago\n"
