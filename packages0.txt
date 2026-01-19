@@ -57,7 +57,6 @@ torch
 torch_geometric
 torchinfo
 tqdm
-uv
 versioner
 wheel
 windrose

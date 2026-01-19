@@ -68,6 +68,7 @@ brew install tree
 brew install tree-sitter
 brew install tree-sitter-cli
 brew install typos-cli
+brew install uv
 brew install watch
 brew install wget
 brew install xclip
