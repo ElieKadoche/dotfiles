@@ -78,6 +78,7 @@ brew install --cask android-platform-tools
 brew install --cask audacity
 brew install --cask discord
 brew install --cask firefox
+brew install --cask garmin-express
 brew install --cask google-chrome
 brew install --cask gopanda
 brew install --cask inkscape
