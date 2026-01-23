@@ -440,7 +440,6 @@ main_git() {
 # Install / update python packages from $1 files
 # WARNING: this function is NOT integrated to the main_all function
 main_python() {
-    python -m pip install --upgrade pip
     uv pip install --upgrade -r $1
     uv pip install $ORIGIN/git_apps/lesspass/cli
     uv cache clean
