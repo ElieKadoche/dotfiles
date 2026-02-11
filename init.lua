@@ -819,7 +819,7 @@ vim.api.nvim_set_hl(0, "CursorLine", { bg = "#3b3b3b" })
 vim.api.nvim_set_hl(0, "LineNr", { bg = "#000000", fg = "#00ff00" })
 vim.api.nvim_set_hl(0, "StatusLine", { bg = "#00ff00", fg = "#000000", bold = true })
 vim.api.nvim_set_hl(0, "TabLineFill", { bg = "#000000" })
-vim.api.nvim_set_hl(0, "Pmenu", { bg = "#800080" })
+vim.api.nvim_set_hl(0, "Pmenu", { bg = "#101010" })
 
 -- Syntax
 vim.api.nvim_set_hl(0, "@function.method.call.python", { bg = "#000000", fg = "#ff1493" })
