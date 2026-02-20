@@ -54,6 +54,7 @@ spotdl
 statsmodels
 tensorboard
 tensorflow
+tiktoken
 torch
 torch_geometric
 torchinfo
