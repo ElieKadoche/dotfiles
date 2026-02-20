@@ -338,7 +338,7 @@ yyy() { yt-dlp --verbose --output "%(title)s.mp3" $2 -f $1 -x --audio-format "mp
 
 # Find directory
 cdd() {
-    IFS=$"\n" directories=($(find $ORIGIN/ -type d | fzf-tmux --query="$1" --multi --select-1 --exit-0))
+    IFS=$'\n' directories=($(find $ORIGIN/ -type d | fzf-tmux --query="$1" --multi --select-1 --exit-0))
     [[ -n "$directories" ]] && cd "${directories[@]}"
 }
 
@@ -378,13 +378,13 @@ FZF-EOF"
 
 # Open files with nvim
 vv() {
-    IFS=$"\n" files=($(find $ORIGIN/ -type f | fzf-tmux --query="$1" --multi --select-1 --exit-0))
+    IFS=$'\n' files=($(find $ORIGIN/ -type f | fzf-tmux --query="$1" --multi --select-1 --exit-0))
     [[ -n "$files" ]] && vim "${files[@]}"
 }
 
 # Open files (general)
 oo() {
-    IFS=$"\n" files=($(find . -type f | fzf-tmux --query="$1" --multi --select-1 --exit-0))
+    IFS=$'\n' files=($(find . -type f | fzf-tmux --query="$1" --multi --select-1 --exit-0))
     [[ -n "$files" ]] && open "${files[@]}"
 }
 
