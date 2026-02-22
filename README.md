@@ -4,7 +4,6 @@ Installation and configuration files.
 
 ## Firefox extensions
 
-- Dark Reader.
 - uBlock Origin.
 - LessPass.
 
