@@ -5,7 +5,6 @@ Installation and configuration files.
 ## Firefox extensions
 
 - uBlock Origin.
-- LessPass.
 
 ## KataGo
 

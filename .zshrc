@@ -441,7 +441,6 @@ main_git() {
 # WARNING: this function is NOT integrated to the main_all function
 main_python() {
     uv pip install --upgrade -r $1
-    uv pip install $ORIGIN/git_apps/lesspass/cli
     uv cache clean
 }
 
@@ -561,7 +560,6 @@ alias python="python3"
 
 # Python functions
 alias mdd="python -m rich.markdown"
-alias lpl="python $ORIGIN/git_apps/lesspass/cli/lesspass/core.py"
 
 # Automatically activate virtual environment
 VENV_PATH="$HOME/.venv"
