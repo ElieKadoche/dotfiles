@@ -11,6 +11,7 @@ gymnasium
 humanize
 ipdb
 isort
+lesspass
 matplotlib
 meson-python
 neovim

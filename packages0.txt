@@ -15,6 +15,7 @@ isort
 jax
 jupyter
 kaleido
+lesspass
 matplotlib
 meson-python
 neovim
