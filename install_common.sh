@@ -44,6 +44,7 @@ python3 -m venv ~/.venv
 source ~/.venv/bin/activate
 
 # Install required packages
+uv pip install autopep8
 uv pip install neovim
 uv pip install pycodestyle
 uv pip install pydocstyle
