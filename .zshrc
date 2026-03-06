@@ -437,13 +437,6 @@ main_git() {
     cd $ORIGIN
 }
 
-# Install / update python packages from $1 files
-# WARNING: this function is NOT integrated to the main_all function
-main_python() {
-    uv pip install --upgrade -r $1
-    uv cache clean
-}
-
 # Main update
 # ------------------------------------------
 # ------------------------------------------
