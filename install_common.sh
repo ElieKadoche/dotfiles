@@ -52,3 +52,4 @@ uv pip install pydocstyle
 uv pip install python-lsp-isort
 uv pip install python-lsp-ruff
 uv pip install "python-lsp-server[all]"
+uv pip install ruff
