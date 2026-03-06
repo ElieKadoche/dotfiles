@@ -46,6 +46,7 @@ source ~/.venv/bin/activate
 # Install required packages
 uv pip install autopep8
 uv pip install bandit
+uv pip install isort
 uv pip install neovim
 uv pip install pycodestyle
 uv pip install pydocstyle
