@@ -587,14 +587,14 @@ require("lazy").setup({
                                 pyflakes = { enabled = false },
                                 pylint = {
                                     enabled = true,
-                                    args = { "--disable=R0914,W0621" }
+                                    args = { "--disable=R0913,R0917,R0914,W0621" }
                                 },
                                 isort = { enabled = true },
                                 ruff = {
                                     enabled = true,
                                     formatEnabled = true,
                                     lineLength = 79,
-                                    ignore = { "R0914", "W0621", "W391" },
+                                    ignore = { "R0913", "R0917", "R0914", "W0621", "W391" },
                                     select = { "I", "E501" },
                                 },
                             },
