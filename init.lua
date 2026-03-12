@@ -585,13 +585,16 @@ require("lazy").setup({
                                 },
                                 pydocstyle = { enabled = true },
                                 pyflakes = { enabled = false },
-                                pylint = { enabled = true },
+                                pylint = {
+                                    enabled = true,
+                                    args = { "--disable=R0914,W0621" }
+                                },
                                 isort = { enabled = true },
                                 ruff = {
                                     enabled = true,
                                     formatEnabled = true,
                                     lineLength = 79,
-                                    ignore = { "W391" },
+                                    ignore = { "R0914", "W0621", "W391" },
                                     select = { "I", "E501" },
                                 },
                             },
