@@ -29,6 +29,7 @@ brew install dos2unix
 brew install ffmpeg
 brew install fzf
 brew install gcc
+brew install gh
 brew install ghostscript
 brew install git
 brew install gnu-sed

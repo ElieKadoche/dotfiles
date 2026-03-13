@@ -23,6 +23,9 @@ git config --global core.editor nvim
 git config --global core.filemode false
 git config --global credential.helper store
 
+# Configure GitHub cli (use tokens)
+gh auth login
+
 # Neovim
 # ------------------------------------------
 

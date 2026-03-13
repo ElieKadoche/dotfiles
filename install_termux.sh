@@ -33,6 +33,7 @@ pkg install -y cmake
 pkg install -y e2fsprogs
 pkg install -y ffmpeg
 pkg install -y fzf
+pkg install -y gh
 pkg install -y ghostscript
 pkg install -y htop
 pkg install -y imagemagick
