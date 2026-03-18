@@ -739,43 +739,8 @@ require("lazy").setup({
                 -- Custom python snippets
                 luasnip.add_snippets("python", {
                     luasnip.snippet("main", fmt([[if __name__ == "__main__":]], {})),
-                    luasnip.snippet(
-                        "debug",
-                        fmt(
-                            [[
-import ipdb
-ipdb.set_trace(context={})]],
-                            { luasnip.insert_node(1) }
-                        )
-                    ),
-                    luasnip.snippet(
-                        "log",
-                        fmt(
-                            [[
-from rich.traceback import install
-install(show_locals=False, word_wrap=True)
-import numpy as np
-import torch
-np.set_printoptions(precision=3, linewidth=200, suppress=True)
-torch.set_printoptions(precision=3, linewidth=200)]],
-                            {}
-                        )
-                    ),
-                    luasnip.snippet(
-                        "plot",
-                        fmt(
-                            [[
-import matplotlib.pyplot as plt
-import numpy as np
-def f(x, k): return np.power(x, k)
-x = np.linspace(0, 1, 1000)
-plt.plot(x, f(x, 2), label="2")
-plt.plot(x, f(x, 3), label="3")
-plt.legend()
-plt.show()]],
-                            {}
-                        )
-                    ),
+                    luasnip.snippet("code", fmt([[import code; code.interact(local=locals())]], {})),
+                    luasnip.snippet("debug", fmt([[import ipdb; ipdb.set_trace(context={})]], { luasnip.insert_node(1) })),
                 })
 
                 -- Main setup
