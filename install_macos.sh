@@ -104,6 +104,10 @@ brew install --cask font-source-sans-pro
 # brew install texlive
 brew install --cask mactex
 
+# Opencode
+brew install anomalyco/tap/opencode
+ollama launch opencode --config
+
 # Change default parameters
 defaults write -g NSAutomaticWindowAnimationsEnabled -bool false
 defaults write -g QLPanelAnimationDuration -float 0
