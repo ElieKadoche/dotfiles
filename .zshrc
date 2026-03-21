@@ -297,8 +297,9 @@ pwgenn() { pwgen -cny --secure $1 1 | pbcopy; }
 # Clean Python files
 pyclean() {
     find . -name "*.pyc" -ls -delete
-    find . -name "__pycache__" -ls -delete
     find . -name ".pytest_cache" -ls -exec rm -rf "{}" \;
+    find . -name ".ruff_cache" -ls -exec rm -rf "{}" \;
+    find . -name "__pycache__" -ls -delete
 }
 
 # Rename all files in a folder
