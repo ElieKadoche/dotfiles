@@ -54,6 +54,7 @@ brew install pandoc
 brew install pwgen
 brew install rsync
 brew install ruby
+brew install rust
 brew install scrcpy
 brew install screen
 brew install shfmt
