@@ -651,7 +651,7 @@ require("lazy").setup({
                             [2] = "Failure",
                             [3] = "Cancelled",
                         }
-                        vim.notify('Build ' .. texlab_build_status[result.status], vim.log.levels.INFO)
+                        vim.notify("Build " .. texlab_build_status[result.status], vim.log.levels.INFO)
                     end, bufnr)
                 end
                 local on_attach_texlab = function(client, bufnr)
