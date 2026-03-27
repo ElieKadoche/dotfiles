@@ -69,6 +69,7 @@ pkg install -y ruff
 pkg install -y rust
 pkg install -y rust
 pkg install -y screen
+pkg install -y shfmt
 pkg install -y stylua
 pkg install -y tealdeer
 pkg install -y termux-api

@@ -21,6 +21,7 @@ brew install python3
 
 # Install Brew packages
 brew install bash-language-server
+brew install bibtex-tidy
 brew install clang-format
 brew install cmake
 brew install coreutils
@@ -39,7 +40,6 @@ brew install imagemagick
 brew install jpeg-turbo
 brew install katago
 brew install languagetool
-brew install latexindent
 brew install ltex-ls-plus
 brew install lua
 brew install lua-language-server
@@ -60,6 +60,7 @@ brew install screen
 brew install shfmt
 brew install stylua
 brew install tesseract
+brew install tex-fmt
 brew install texlab
 brew install tlrc
 brew install tmux

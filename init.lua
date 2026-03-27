@@ -64,9 +64,8 @@ vim.opt.colorcolumn = "79"
 -- Minimal number of screen lines to keep above and below the cursor
 vim.opt.scrolloff = 0
 
--- DISABLED
 -- Ask to save file if unsaved changes
--- vim.opt.confirm = true
+vim.opt.confirm = true
 
 -- Use spaces instead of tabs
 vim.opt.expandtab = true
@@ -132,11 +131,11 @@ vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper win
 
 -- Highlight when yanking (copying) text
 vim.api.nvim_create_autocmd("TextYankPost", {
-    desc = "Highlight when yanking (copying) text",
-    group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
-    callback = function()
-        vim.hl.on_yank()
-    end,
+	desc = "Highlight when yanking (copying) text",
+	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+	callback = function()
+		vim.hl.on_yank()
+	end,
 })
 
 -- Vertical split
@@ -160,620 +159,640 @@ vim.keymap.set("n", "<leader><space>", ":lua vim.diagnostic.open_float(0, {scope
 
 -- 1 sentence per line
 vim.keymap.set("n", "<leader>p", function()
-    vim.cmd([[:.s/\. \+/\.\r/g]])
+	vim.cmd([[:.s/\. \+/\.\r/g]])
 end, { silent = true })
 
 -- Enable / disable wrap
 vim.keymap.set("n", "<leader>w", function()
-    vim.opt.wrap = not vim.opt.wrap:get()
-    print("wrap: " .. tostring(vim.opt.wrap:get()))
+	vim.opt.wrap = not vim.opt.wrap:get()
+	print("wrap: " .. tostring(vim.opt.wrap:get()))
 end, { desc = "Toggle wrap" })
 
 -- Trim white spaces at the end of lines
 vim.api.nvim_create_autocmd("BufWritePre", {
-    pattern = "*",
-    callback = function()
-        vim.cmd([[%s/\s\+$//e]])
-    end,
+	pattern = "*",
+	callback = function()
+		vim.cmd([[%s/\s\+$//e]])
+	end,
 })
 
 -- Prevent editing in readonly mode
 vim.api.nvim_create_autocmd("BufEnter", {
-    callback = function()
-        if vim.o.readonly then
-            vim.opt_local.modifiable = false
-        end
-    end,
+	callback = function()
+		if vim.o.readonly then
+			vim.opt_local.modifiable = false
+		end
+	end,
 })
 
 -- Install lazy
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
-    local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-    local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
-    if vim.v.shell_error ~= 0 then
-        vim.api.nvim_echo({
-            { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-            { out,                            "WarningMsg" },
-            { "\nPress any key to exit..." },
-        }, true, {})
-        vim.fn.getchar()
-        os.exit(1)
-    end
+	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+	local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+	if vim.v.shell_error ~= 0 then
+		vim.api.nvim_echo({
+			{ "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+			{ out, "WarningMsg" },
+			{ "\nPress any key to exit..." },
+		}, true, {})
+		vim.fn.getchar()
+		os.exit(1)
+	end
 end
 vim.opt.rtp:prepend(lazypath)
 
 -- Plugins
 require("lazy").setup({
-    spec = {
-        -- nvim-treesitter
-        -- https://github.com/nvim-treesitter/nvim-treesitter?tab=readme-ov-file#supported-languages
-        -- ------------------------------------------
-        -- ------------------------------------------
-        {
-            "nvim-treesitter/nvim-treesitter",
-            branch = "main",
-            lazy = false,
-            build = ":TSUpdate",
-            config = function()
-                -- List of languages
-                local languages = {
-                    "bash",
-                    "bibtex",
-                    "c",
-                    "cmake",
-                    "cpp",
-                    "csv",
-                    "diff",
-                    "git_config",
-                    "git_rebase",
-                    "gitattributes",
-                    "gitcommit",
-                    "gitignore",
-                    "html",
-                    "lua",
-                    "make",
-                    "markdown",
-                    "markdown_inline",
-                    "python",
-                    "ssh_config",
-                    "vim",
-                    "vimdoc",
-                    "yaml",
-                }
+	spec = {
+		-- nvim-treesitter
+		-- https://github.com/nvim-treesitter/nvim-treesitter?tab=readme-ov-file#supported-languages
+		-- ------------------------------------------
+		-- ------------------------------------------
+		{
+			"nvim-treesitter/nvim-treesitter",
+			branch = "main",
+			lazy = false,
+			build = ":TSUpdate",
+			config = function()
+				-- List of languages
+				local languages = {
+					"bash",
+					"bibtex",
+					"c",
+					"cmake",
+					"cpp",
+					"csv",
+					"diff",
+					"git_config",
+					"git_rebase",
+					"gitattributes",
+					"gitcommit",
+					"gitignore",
+					"html",
+					"lua",
+					"make",
+					"markdown",
+					"markdown_inline",
+					"python",
+					"ssh_config",
+					"vim",
+					"vimdoc",
+					"yaml",
+				}
 
-                -- Install
-                require("nvim-treesitter").install(languages)
+				-- Install
+				require("nvim-treesitter").install(languages)
 
-                -- Launch highlights + folds + indentation
-                vim.api.nvim_create_autocmd("FileType", {
-                    pattern = languages,
-                    callback = function()
-                        vim.treesitter.start()
-                        vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-                        vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-                    end,
-                })
-            end,
-        },
+				-- Launch highlights + folds + indentation
+				vim.api.nvim_create_autocmd("FileType", {
+					pattern = languages,
+					callback = function()
+						vim.treesitter.start()
+						vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+						vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+					end,
+				})
+			end,
+		},
 
-        -- nvim-tree.lua
-        -- ------------------------------------------
-        -- ------------------------------------------
-        {
-            "nvim-tree/nvim-tree.lua",
-            version = "*",
-            lazy = false,
-            config = function()
-                -- Parameters
-                require("nvim-tree").setup({
-                    renderer = {
-                        icons = {
-                            show = {
-                                file = false,
-                                folder = false,
-                                folder_arrow = false,
-                                git = false,
-                            },
-                        },
-                    },
-                    filters = {
-                        dotfiles = false,
-                        git_clean = false,
-                        no_buffer = false,
-                    },
-                    git = {
-                        enable = true,
-                        ignore = false,
-                    },
-                })
-                vim.keymap.set("n", "<leader>t", ":NvimTreeToggle<cr>")
-                vim.api.nvim_create_autocmd("VimEnter", {
-                    callback = function()
-                        local current_buf = vim.api.nvim_get_current_buf()
-                        if vim.fn.argc() == 0 and vim.fn.bufname(current_buf) == "" then
-                            vim.cmd("NvimTreeOpen")
-                        end
-                    end,
-                })
-            end,
-        },
+		-- nvim-tree.lua
+		-- ------------------------------------------
+		-- ------------------------------------------
+		{
+			"nvim-tree/nvim-tree.lua",
+			version = "*",
+			lazy = false,
+			config = function()
+				-- Parameters
+				require("nvim-tree").setup({
+					renderer = {
+						icons = {
+							show = {
+								file = false,
+								folder = false,
+								folder_arrow = false,
+								git = false,
+							},
+						},
+					},
+					filters = {
+						dotfiles = false,
+						git_clean = false,
+						no_buffer = false,
+					},
+					git = {
+						enable = true,
+						ignore = false,
+					},
+				})
+				vim.keymap.set("n", "<leader>t", ":NvimTreeToggle<cr>")
+				vim.api.nvim_create_autocmd("VimEnter", {
+					callback = function()
+						local current_buf = vim.api.nvim_get_current_buf()
+						if vim.fn.argc() == 0 and vim.fn.bufname(current_buf) == "" then
+							vim.cmd("NvimTreeOpen")
+						end
+					end,
+				})
+			end,
+		},
 
-        -- bufferline.nvim
-        -- ------------------------------------------
-        -- ------------------------------------------
-        {
-            "akinsho/bufferline.nvim",
-            config = function()
-                local status_ok, bufferline = pcall(require, "bufferline")
-                if not status_ok then
-                    return
-                end
-                bufferline.setup({
-                    options = {
-                        show_buffer_icons = false,
-                        show_close_icon = false,
-                        show_buffer_close_icons = false,
-                    },
-                })
-            end,
-        },
+		-- bufferline.nvim
+		-- ------------------------------------------
+		-- ------------------------------------------
+		{
+			"akinsho/bufferline.nvim",
+			config = function()
+				local status_ok, bufferline = pcall(require, "bufferline")
+				if not status_ok then
+					return
+				end
+				bufferline.setup({
+					options = {
+						show_buffer_icons = false,
+						show_close_icon = false,
+						show_buffer_close_icons = false,
+					},
+				})
+			end,
+		},
 
-        -- fzf-lua
-        -- ------------------------------------------
-        -- ------------------------------------------
-        {
-            "ibhagwan/fzf-lua",
-            config = function()
-                vim.keymap.set("n", "<leader>o", ":FzfLua files<cr>")
-            end,
-        },
+		-- fzf-lua
+		-- ------------------------------------------
+		-- ------------------------------------------
+		{
+			"ibhagwan/fzf-lua",
+			config = function()
+				vim.keymap.set("n", "<leader>o", ":FzfLua files<cr>")
+			end,
+		},
 
-        -- git-conflict.nvim
-        -- ------------------------------------------
-        -- ------------------------------------------
-        {
-            "akinsho/git-conflict.nvim",
-            version = "*",
-            config = true,
-        },
+		-- git-conflict.nvim
+		-- ------------------------------------------
+		-- ------------------------------------------
+		{
+			"akinsho/git-conflict.nvim",
+			version = "*",
+			config = true,
+		},
 
-        -- indent-blankline.nvim
-        -- ------------------------------------------
-        -- ------------------------------------------
-        {
-            "lukas-reineke/indent-blankline.nvim",
-            main = "ibl",
-            ---@module "ibl"
-            ---@type ibl.config
-            opts = {},
-        },
+		-- indent-blankline.nvim
+		-- ------------------------------------------
+		-- ------------------------------------------
+		{
+			"lukas-reineke/indent-blankline.nvim",
+			main = "ibl",
+			---@module "ibl"
+			---@type ibl.config
+			opts = {},
+		},
 
-        -- lualine.nvim
-        -- ------------------------------------------
-        -- ------------------------------------------
-        {
-            "nvim-lualine/lualine.nvim",
-            config = function()
-                require("lualine").setup({
-                    options = {
-                        theme = "16color",
-                    },
-                    sections = {
-                        lualine_a = { "mode" },
-                        lualine_b = { "branch" },
-                        lualine_c = { "filename" },
-                        lualine_x = { "encoding", "filetype" },
-                        lualine_y = { "progress" },
-                        lualine_z = { "location" },
-                    },
-                    inactive_sections = {
-                        lualine_a = {},
-                        lualine_b = {},
-                        lualine_c = { "filename" },
-                        lualine_x = { "location" },
-                        lualine_y = {},
-                        lualine_z = {},
-                    },
-                })
-            end,
-        },
+		-- lualine.nvim
+		-- ------------------------------------------
+		-- ------------------------------------------
+		{
+			"nvim-lualine/lualine.nvim",
+			config = function()
+				require("lualine").setup({
+					options = {
+						theme = "16color",
+					},
+					sections = {
+						lualine_a = { "mode" },
+						lualine_b = { "branch" },
+						lualine_c = { "filename" },
+						lualine_x = { "encoding", "filetype" },
+						lualine_y = { "progress" },
+						lualine_z = { "location" },
+					},
+					inactive_sections = {
+						lualine_a = {},
+						lualine_b = {},
+						lualine_c = { "filename" },
+						lualine_x = { "location" },
+						lualine_y = {},
+						lualine_z = {},
+					},
+				})
+			end,
+		},
 
-        -- oil.nvim
-        -- ------------------------------------------
-        -- ------------------------------------------
-        {
-            "stevearc/oil.nvim",
-            ---@module "oil"
-            ---@type oil.SetupOpts
-            lazy = false,
-            opts = {
-                default_file_explorer = true,
-                delete_to_trash = false,
-                view_options = { show_hidden = true },
-                columns = {
-                    "icon",
-                    "permissions",
-                    "size",
-                    "mtime",
-                },
-            },
-        },
+		-- oil.nvim
+		-- ------------------------------------------
+		-- ------------------------------------------
+		{
+			"stevearc/oil.nvim",
+			---@module "oil"
+			---@type oil.SetupOpts
+			lazy = false,
+			opts = {
+				default_file_explorer = true,
+				delete_to_trash = false,
+				view_options = { show_hidden = true },
+				columns = {
+					"icon",
+					"permissions",
+					"size",
+					"mtime",
+				},
+			},
+		},
 
-        -- csvview.nvim
-        -- ------------------------------------------
-        -- ------------------------------------------
-        {
-            "hat0uma/csvview.nvim",
-            ---@module "csvview"
-            ---@type CsvView.Options
-            opts = {
-                parser = { comments = { "#", "//" } },
-                keymaps = {
-                    -- Text objects for selecting fields
-                    textobject_field_inner = { "if", mode = { "o", "x" } },
-                    textobject_field_outer = { "af", mode = { "o", "x" } },
-                    jump_next_field_end = { "<Tab>", mode = { "n", "v" } },
-                    jump_prev_field_end = { "<S-Tab>", mode = { "n", "v" } },
-                    jump_next_row = { "<Enter>", mode = { "n", "v" } },
-                    jump_prev_row = { "<S-Enter>", mode = { "n", "v" } },
-                },
-            },
-            cmd = { "CsvViewEnable", "CsvViewDisable", "CsvViewToggle" },
-            init = function()
-                vim.api.nvim_create_autocmd("FileType", {
-                    pattern = "csv",
-                    callback = function()
-                        vim.cmd("CsvViewEnable")
-                    end,
-                })
-            end,
-        },
+		-- which-key.nvim
+		-- ------------------------------------------
+		-- ------------------------------------------
+		{
+			"folke/which-key.nvim",
+			event = "VeryLazy",
+			opts = {},
+			keys = {
+				{
+					"<leader>?",
+					function()
+						require("which-key").show({ global = false })
+					end,
+					desc = "Buffer Local Keymaps (which-key)",
+				},
+			},
+		},
 
-        -- nvim-lspconfig
-        -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
-        -- ------------------------------------------
-        -- ------------------------------------------
-        {
-            "neovim/nvim-lspconfig",
-            config = function()
-                local capabilities = require("cmp_nvim_lsp").default_capabilities()
+		-- csvview.nvim
+		-- ------------------------------------------
+		-- ------------------------------------------
+		{
+			"hat0uma/csvview.nvim",
+			---@module "csvview"
+			---@type CsvView.Options
+			opts = {
+				parser = { comments = { "#", "//" } },
+				keymaps = {
+					-- Text objects for selecting fields
+					textobject_field_inner = { "if", mode = { "o", "x" } },
+					textobject_field_outer = { "af", mode = { "o", "x" } },
+					jump_next_field_end = { "<Tab>", mode = { "n", "v" } },
+					jump_prev_field_end = { "<S-Tab>", mode = { "n", "v" } },
+					jump_next_row = { "<Enter>", mode = { "n", "v" } },
+					jump_prev_row = { "<S-Enter>", mode = { "n", "v" } },
+				},
+			},
+			cmd = { "CsvViewEnable", "CsvViewDisable", "CsvViewToggle" },
+			init = function()
+				vim.api.nvim_create_autocmd("FileType", {
+					pattern = "csv",
+					callback = function()
+						vim.cmd("CsvViewEnable")
+					end,
+				})
+			end,
+		},
 
-                -- Shared on_attach
-                local on_attach = function(client, bufnr)
-                    if client.supports_method("textDocument/formatting") then
-                        vim.api.nvim_create_autocmd("BufWritePre", {
-                            buffer = bufnr,
-                            callback = function()
-                                vim.lsp.buf.format({ async = false })
-                            end,
-                        })
-                    end
-                end
+		-- conform.nvim
+		-- https://github.com/stevearc/conform.nvim.git
+		-- ------------------------------------------
+		-- ------------------------------------------
+		{
+			"stevearc/conform.nvim",
+			event = { "BufWritePre" },
+			cmd = { "ConformInfo" },
+			config = function()
+				require("conform").setup({
+					formatters_by_ft = {
+						bash = { "shfmt", lsp_format = "fallback" },
+						bib = { "bibtex-tidy", lsp_format = "fallback" },
+						lua = { "stylua", lsp_format = "fallback" },
+						plaintex = { "tex-fmt", lsp_format = "fallback" },
+						python = { "ruff_fix", "ruff_organize_imports", "ruff_format", lsp_format = "fallback" },
+						sh = { "shfmt", lsp_format = "fallback" },
+						zsh = { "shfmt", lsp_format = "fallback" },
+					},
+					default_format_opts = {
+						lsp_format = "fallback",
+					},
+					format_on_save = {
+						timeout_ms = 500,
+						lsp_format = "fallback",
+					},
+					formatters = {
+						ruff_format = {
+							append_args = { "--line-length", "79" },
+						},
+						ruff_fix = {
+							append_args = {
+								"--select",
+								"E,W,F,D,I",
+								"--ignore",
+								"W391",
+							},
+						},
+					},
+				})
+			end,
+		},
 
-                -- Diagnostic config
-                -- See :help vim.diagnostic.Opts
-                vim.diagnostic.config {
-                    severity_sort = true,
-                    float = { border = "rounded", source = "if_many" },
-                    underline = { severity = vim.diagnostic.severity.ERROR },
-                    signs = vim.g.have_nerd_font and {
-                        text = {
-                            [vim.diagnostic.severity.ERROR] = "󰅚 ",
-                            [vim.diagnostic.severity.WARN] = "󰀪 ",
-                            [vim.diagnostic.severity.INFO] = "󰋽 ",
-                            [vim.diagnostic.severity.HINT] = "󰌶 ",
-                        },
-                    } or {},
-                    virtual_text = {
-                        source = "if_many",
-                        spacing = 2,
-                        format = function(diagnostic)
-                            local diagnostic_message = {
-                                [vim.diagnostic.severity.ERROR] = diagnostic.message,
-                                [vim.diagnostic.severity.WARN] = diagnostic.message,
-                                [vim.diagnostic.severity.INFO] = diagnostic.message,
-                                [vim.diagnostic.severity.HINT] = diagnostic.message,
-                            }
-                            return diagnostic_message[diagnostic.severity]
-                        end,
-                    },
-                }
+		-- nvim-lspconfig
+		-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
+		-- ------------------------------------------
+		-- ------------------------------------------
+		{
+			"neovim/nvim-lspconfig",
+			config = function()
+				local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-                -- bashls
-                local on_attach_bashls = function(client, bufnr)
-                    local filename = vim.api.nvim_buf_get_name(bufnr)
-                    -- Detach bashls from .zsh_history files entirely
-                    if filename:match("%.zsh_history$") then
-                        vim.schedule(function() vim.lsp.buf_detach_client(bufnr, client.id) end)
-                        return
-                    end
-                    -- Normal on_attach function
-                    if client.supports_method("textDocument/formatting") then
-                        vim.api.nvim_create_autocmd("BufWritePre", {
-                            buffer = bufnr,
-                            callback = function()
-                                vim.lsp.buf.format({ async = false })
-                            end,
-                        })
-                    end
-                end
-                vim.lsp.config("bashls", {
-                    capabilities = capabilities,
-                    on_attach = on_attach_bashls,
-                    cmd = { "bash-language-server", "start" },
-                    filetypes = { "bash", "sh", "zsh" },
-                })
-                vim.lsp.enable("bashls")
+				-- Global LspAttach autocmd
+				vim.api.nvim_create_autocmd("LspAttach", {
+					callback = function(args)
+						local client = vim.lsp.get_client_by_id(args.data.client_id)
+						local bufnr = args.buf
+						if not client then
+							return
+						end
 
-                -- clangd
-                vim.lsp.config("clangd", {
-                    capabilities = capabilities,
-                    on_attach = on_attach,
-                    cmd = { "clangd", "--background-index", "--clang-tidy", "--log=verbose" },
-                    filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
-                })
-                vim.lsp.enable("clangd")
+						-- Detach bashls from .zsh_history files
+						if client.name == "bashls" then
+							local filename = vim.api.nvim_buf_get_name(bufnr)
+							if filename:match("%.zsh_history$") then
+								vim.schedule(function()
+									vim.lsp.buf_detach_client(bufnr, client.id)
+								end)
+								return
+							end
+						end
 
-                -- ltex-ls-plus
-                vim.lsp.config("ltex", {
-                    capabilities = capabilities,
-                    on_attach = on_attach,
-                    cmd = { "ltex-ls-plus" },
-                    filetypes = {
-                        "bib",
-                        "context",
-                        "gitcommit",
-                        "html",
-                        "latex",
-                        "markdown",
-                        "org",
-                        "pandoc",
-                        "plaintex",
-                        "rst",
-                        "tex",
-                        "text",
-                        "typst",
-                        "xhtml",
-                    },
-                    settings = {
-                        ltex = {
-                            enabled = true,
-                            language = { "en-US", "fr" },
-                        },
-                    },
-                })
-                vim.lsp.enable("ltex")
+						-- Disable hover for ruff (let pylsp/jedi handle it)
+						if client.name == "ruff" then
+							client.server_capabilities.hoverProvider = false
+						end
 
-                -- lua-language-server
-                vim.lsp.config("lua_ls", {
-                    capabilities = capabilities,
-                    on_attach = on_attach,
-                    cmd = { "lua-language-server" },
-                    filetypes = { "lua" },
-                    settings = {
-                        Lua = {
-                            completion = { callSnippet = "Replace" },
-                            diagnostics = { globals = { "vim" } },
-                            format = { enable = true },
-                            workspace = { checkThirdParty = false },
-                        },
-                    },
-                })
-                vim.lsp.enable("lua_ls")
+						-- Texlab build command
+						if client.name == "texlab" then
+							vim.api.nvim_buf_create_user_command(bufnr, "LspTexlabBuild", function()
+								local win = vim.api.nvim_get_current_win()
+								local params = vim.lsp.util.make_position_params(win, client.offset_encoding)
+								client:request("textDocument/build", params, function(err, result)
+									if err then
+										error(tostring(err))
+									end
+									local texlab_build_status = {
+										[0] = "Success",
+										[1] = "Error",
+										[2] = "Failure",
+										[3] = "Cancelled",
+									}
+									vim.notify("Build " .. texlab_build_status[result.status], vim.log.levels.INFO)
+								end, bufnr)
+							end, { desc = "Build the current buffer" })
+						end
+					end,
+				})
 
-                -- python-language-server
-                vim.lsp.config("pylsp", {
-                    capabilities = capabilities,
-                    on_attach = on_attach,
-                    cmd = { "pylsp" },
-                    filetypes = { "python" },
-                    settings = {
-                        pylsp = {
-                            plugins = {
-                                autopep8 = { enabled = true },
-                                flake8 = { enabled = false },
-                                jedi_completion = { enabled = true },
-                                jedi_definition = { enabled = true },
-                                jedi_hover = { enabled = true },
-                                jedi_references = { enabled = true },
-                                jedi_signature_help = { enabled = true },
-                                jedi_symbols = { enabled = true },
-                                pycodestyle = {
-                                    ignore = { "W391" },
-                                    maxLineLength = 79,
-                                },
-                                pydocstyle = { enabled = true },
-                                pyflakes = { enabled = false },
-                                pylint = {
-                                    enabled = true,
-                                    args = { "--disable=W0621" }
-                                },
-                                isort = { enabled = true },
-                                ruff = {
-                                    enabled = true,
-                                    formatEnabled = true,
-                                    lineLength = 79,
-                                    ignore = { "W391" },
-                                    select = { "I", "E501" },
-                                },
-                            },
-                        },
-                    },
-                })
-                vim.lsp.enable("pylsp")
+				-- Diagnostic config
+				-- See :help vim.diagnostic.Opts
+				vim.diagnostic.config({
+					severity_sort = true,
+					float = { border = "rounded", source = "if_many" },
+					underline = { severity = vim.diagnostic.severity.ERROR },
+					signs = vim.g.have_nerd_font and {
+						text = {
+							[vim.diagnostic.severity.ERROR] = "󰅚 ",
+							[vim.diagnostic.severity.WARN] = "󰀪 ",
+							[vim.diagnostic.severity.INFO] = "󰋽 ",
+							[vim.diagnostic.severity.HINT] = "󰌶 ",
+						},
+					} or {},
+					virtual_text = {
+						source = "if_many",
+						spacing = 2,
+						format = function(diagnostic)
+							local diagnostic_message = {
+								[vim.diagnostic.severity.ERROR] = diagnostic.message,
+								[vim.diagnostic.severity.WARN] = diagnostic.message,
+								[vim.diagnostic.severity.INFO] = diagnostic.message,
+								[vim.diagnostic.severity.HINT] = diagnostic.message,
+							}
+							return diagnostic_message[diagnostic.severity]
+						end,
+					},
+				})
 
-                -- ruff
-                -- vim.lsp.config("ruff", {
-                --     capabilities = capabilities,
-                --     on_attach = on_attach,
-                --     cmd = { "ruff", "server" },
-                --     filetypes = { "python" },
-                --     init_options = {
-                --         settings = {
-                --             configuration = { format = { ["quote-style"] = "double" } },
-                --             configurationPreference = "filesystemFirst",
-                --             lineLength = 79,
-                --             fixAll = true,
-                --             organizeImports = true,
-                --             showSyntaxErrors = true,
-                --             logLevel = "debug",
-                --             codeAction = {
-                --                 disableRuleComment = { enable = true },
-                --                 fixViolation = { enable = true },
-                --             },
-                --             lint = {
-                --                 enable = true,
-                --                 preview = true,
-                --                 select = { "I", "E501" },
-                --                 ignore = { "W391" },
-                --             },
-                --             format = {
-                --                 preview = true,
-                --                 backend = "internal",
-                --             },
-                --         },
-                --     },
-                -- })
-                -- vim.lsp.enable("ruff")
+				-- bashls
+				vim.lsp.config("bashls", {
+					capabilities = capabilities,
+					cmd = { "bash-language-server", "start" },
+					filetypes = { "bash", "sh", "zsh" },
+				})
+				vim.lsp.enable("bashls")
 
-                -- texlab
-                local buf_build_texlab = function(client, bufnr)
-                    local win = vim.api.nvim_get_current_win()
-                    local params = vim.lsp.util.make_position_params(win, client.offset_encoding)
-                    client:request("textDocument/build", params, function(err, result)
-                        if err then
-                            error(tostring(err))
-                        end
-                        local texlab_build_status = {
-                            [0] = "Success",
-                            [1] = "Error",
-                            [2] = "Failure",
-                            [3] = "Cancelled",
-                        }
-                        vim.notify("Build " .. texlab_build_status[result.status], vim.log.levels.INFO)
-                    end, bufnr)
-                end
-                local on_attach_texlab = function(client, bufnr)
-                    -- Custom build function
-                    for _, cmd in ipairs({
-                        { name = "TexlabBuild", fn = buf_build_texlab, desc = "Build the current buffer" },
-                    }) do
-                        vim.api.nvim_buf_create_user_command(bufnr, "Lsp" .. cmd.name, function()
-                            cmd.fn(client, bufnr)
-                        end, { desc = cmd.desc })
-                    end
-                    -- Normal on_attach function
-                    if client.supports_method("textDocument/formatting") then
-                        vim.api.nvim_create_autocmd("BufWritePre", {
-                            buffer = bufnr,
-                            callback = function()
-                                vim.lsp.buf.format({ async = false })
-                            end,
-                        })
-                    end
-                end
-                vim.lsp.config("texlab", {
-                    capabilities = capabilities,
-                    on_attach = on_attach_texlab,
-                    cmd = { "texlab" },
-                    filetypes = { "tex", "plaintex", "bib" },
-                    settings = {
-                        texlab = {
-                            build = {
-                                args = { "-pdf", "-interaction=nonstopmode", "-synctex=1", "%f" },
-                                executable = "latexmk",
-                                forwardSearchAfter = true,
-                                onSave = false,
-                            },
-                            chktex = {
-                                onEdit = false,
-                                onOpenAndSave = true,
-                            },
-                            diagnosticsDelay = 300,
-                            forwardSearch = {
-                                executable = "open",
-                                args = { "-a", "Skim", "%p" },
-                            },
-                            bibtexFormatter = "texlab",
-                            latexFormatter = "latexindent",
-                            latexindent = {
-                                modifyLineBreaks = false,
-                            },
-                        },
-                    },
-                })
-                vim.lsp.enable("texlab")
-            end,
-        },
+				-- clangd
+				vim.lsp.config("clangd", {
+					capabilities = capabilities,
+					cmd = { "clangd", "--background-index", "--clang-tidy", "--log=verbose" },
+					filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
+				})
+				vim.lsp.enable("clangd")
 
-        -- cmp
-        -- ------------------------------------------
-        -- ------------------------------------------
-        {
-            "hrsh7th/nvim-cmp",
-            dependencies = {
-                "hrsh7th/cmp-nvim-lsp",
-                "hrsh7th/cmp-buffer",
-                "hrsh7th/cmp-path",
-                "hrsh7th/cmp-cmdline",
-                "L3MON4D3/LuaSnip",
-                "saadparwaiz1/cmp_luasnip",
-            },
+				-- ltex-ls-plus
+				vim.lsp.config("ltex", {
+					capabilities = capabilities,
+					cmd = { "ltex-ls-plus" },
+					filetypes = {
+						"bib",
+						"context",
+						"gitcommit",
+						"html",
+						"latex",
+						"markdown",
+						"org",
+						"pandoc",
+						"plaintex",
+						"rst",
+						"tex",
+						"text",
+						"typst",
+						"xhtml",
+					},
+					settings = {
+						ltex = {
+							enabled = true,
+							language = { "en-US", "fr" },
+						},
+					},
+				})
+				vim.lsp.enable("ltex")
 
-            config = function()
-                -- See `:help cmp`
-                local cmp = require("cmp")
-                local luasnip = require("luasnip")
-                local fmt = require("luasnip.extras.fmt").fmt
-                luasnip.config.setup({})
+				-- lua-language-server
+				vim.lsp.config("lua_ls", {
+					capabilities = capabilities,
+					cmd = { "lua-language-server" },
+					filetypes = { "lua" },
+					settings = {
+						Lua = {
+							completion = { callSnippet = "Replace" },
+							diagnostics = { globals = { "vim" } },
+							format = { enable = true },
+							workspace = { checkThirdParty = false },
+						},
+					},
+				})
+				vim.lsp.enable("lua_ls")
 
-                -- Custom global snippets
-                luasnip.add_snippets("all", {
-                    luasnip.snippet("42", {
-                        luasnip.insert_node(1),
-                        luasnip.text_node(" ------------------------------------------"),
-                    }),
-                })
+				-- python-language-server
+				vim.lsp.config("pylsp", {
+					capabilities = capabilities,
+					cmd = { "pylsp" },
+					filetypes = { "python" },
+					settings = {
+						pylsp = {
+							plugins = {
+								-- Disable everything
+								autopep8 = { enabled = false },
+								flake8 = { enabled = false },
+								isort = { enabled = false },
+								pycodestyle = { enabled = false },
+								pydocstyle = { enabled = false },
+								pyflakes = { enabled = false },
+								pylint = { enabled = false },
+								ruff = { enabled = false },
+								-- Except jedi
+								jedi_completion = { enabled = true },
+								jedi_definition = { enabled = true },
+								jedi_hover = { enabled = true },
+								jedi_references = { enabled = true },
+								jedi_signature_help = { enabled = true },
+								jedi_symbols = { enabled = true },
+							},
+						},
+					},
+				})
+				vim.lsp.enable("pylsp")
 
-                -- Custom python snippets
-                luasnip.add_snippets("python", {
-                    luasnip.snippet("main", fmt([[if __name__ == "__main__":]], {})),
-                    luasnip.snippet("code", fmt([[import code; code.interact(local=locals())]], {})),
-                    luasnip.snippet("debug", fmt([[import ipdb; ipdb.set_trace(context={})]], { luasnip.insert_node(1) })),
-                })
+				-- ruff
+				vim.lsp.config("ruff", {
+					capabilities = capabilities,
+					cmd = { "ruff", "server" },
+					filetypes = { "python" },
+					init_options = {
+						settings = {
+							configuration = { format = { ["quote-style"] = "double" } },
+							configurationPreference = "filesystemFirst",
+							showSyntaxErrors = true,
+							logLevel = "debug",
+							lineLength = 79,
+							lint = {
+								enable = true,
+								preview = true,
+								select = { "E", "W", "F", "D", "I" },
+								ignore = { "W391" },
+							},
+						},
+					},
+				})
+				vim.lsp.enable("ruff")
 
-                -- Main setup
-                cmp.setup({
-                    snippet = {
-                        expand = function(args)
-                            luasnip.lsp_expand(args.body)
-                        end,
-                    },
+				-- texlab
+				vim.lsp.config("texlab", {
+					capabilities = capabilities,
+					cmd = { "texlab" },
+					filetypes = { "tex", "plaintex", "bib" },
+					settings = {
+						texlab = {
+							build = {
+								args = { "-pdf", "-interaction=nonstopmode", "-synctex=1", "%f" },
+								executable = "latexmk",
+								forwardSearchAfter = true,
+								onSave = false,
+							},
+							chktex = {
+								onEdit = false,
+								onOpenAndSave = true,
+							},
+							diagnosticsDelay = 300,
+							forwardSearch = {
+								executable = "open",
+								args = { "-a", "Skim", "%p" },
+							},
+							bibtexFormatter = "texlab",
+							latexFormatter = "latexindent",
+							latexindent = {
+								modifyLineBreaks = false,
+							},
+						},
+					},
+				})
+				vim.lsp.enable("texlab")
+			end,
+		},
 
-                    -- Please read `:help ins-completion`
-                    mapping = cmp.mapping.preset.insert({
-                        ["<S-Space>"] = cmp.mapping.complete({}),
-                        ["<Tab>"] = cmp.mapping.confirm({ select = true }),
-                        ["<S-Uown>"] = cmp.mapping.select_next_item({}),
-                        ["<S-Up>"] = cmp.mapping.select_prev_item(),
-                        ["<S-Left>"] = cmp.mapping.scroll_docs(-4),
-                        ["<S-Right>"] = cmp.mapping.scroll_docs(4),
-                    }),
-                    sources = {
-                        { name = "nvim_lsp" },
-                        { name = "luasnip" },
-                        { name = "buffer" },
-                        { name = "path" },
-                        { name = "nvim_lsp_signature_help" },
-                    },
-                })
-            end,
-        },
-    },
-    -- Disable luarocks and updates check
-    rocks = { enabled = false },
-    checker = { enabled = false },
+		-- nvim-cmp
+		-- ------------------------------------------
+		-- ------------------------------------------
+		{
+			"hrsh7th/nvim-cmp",
+			dependencies = {
+				"hrsh7th/cmp-nvim-lsp",
+				"hrsh7th/cmp-buffer",
+				"hrsh7th/cmp-path",
+				"hrsh7th/cmp-cmdline",
+				"L3MON4D3/LuaSnip",
+				"saadparwaiz1/cmp_luasnip",
+			},
+
+			config = function()
+				-- See `:help cmp`
+				local cmp = require("cmp")
+				local luasnip = require("luasnip")
+				local fmt = require("luasnip.extras.fmt").fmt
+				luasnip.config.setup({})
+
+				-- Custom global snippets
+				luasnip.add_snippets("all", {
+					luasnip.snippet("42", {
+						luasnip.insert_node(1),
+						luasnip.text_node(" ------------------------------------------"),
+					}),
+				})
+
+				-- Custom python snippets
+				luasnip.add_snippets("python", {
+					luasnip.snippet("main", fmt([[if __name__ == "__main__":]], {})),
+					luasnip.snippet("code", fmt([[import code; code.interact(local=locals())]], {})),
+					luasnip.snippet(
+						"debug",
+						fmt([[import ipdb; ipdb.set_trace(context={})]], { luasnip.insert_node(1) })
+					),
+				})
+
+				-- Main setup
+				cmp.setup({
+					snippet = {
+						expand = function(args)
+							luasnip.lsp_expand(args.body)
+						end,
+					},
+
+					-- Please read `:help ins-completion`
+					mapping = cmp.mapping.preset.insert({
+						["<S-Space>"] = cmp.mapping.complete({}),
+						["<Tab>"] = cmp.mapping.confirm({ select = true }),
+						["<S-Uown>"] = cmp.mapping.select_next_item({}),
+						["<S-Up>"] = cmp.mapping.select_prev_item(),
+						["<S-Left>"] = cmp.mapping.scroll_docs(-4),
+						["<S-Right>"] = cmp.mapping.scroll_docs(4),
+					}),
+					sources = {
+						{ name = "nvim_lsp" },
+						{ name = "luasnip" },
+						{ name = "buffer" },
+						{ name = "path" },
+						{ name = "nvim_lsp_signature_help" },
+					},
+				})
+			end,
+		},
+	},
+	-- Disable luarocks and updates check
+	rocks = { enabled = false },
+	checker = { enabled = false },
 })
 
 -- Use vim colorscheme
