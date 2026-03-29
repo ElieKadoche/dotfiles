@@ -405,10 +405,14 @@ require("lazy").setup({
 		{
 			"folke/which-key.nvim",
 			event = "VeryLazy",
-			opts = {},
+			opts = {
+				icons = {
+					mappings = false,
+				},
+			},
 			keys = {
 				{
-					"<leader>?",
+					"<leader>/",
 					function()
 						require("which-key").show({ global = false })
 					end,
