@@ -1,14 +1,14 @@
 # Get system
-if [[ $(uname -o) = "GNU/Linux" ]]; then
-    _SYSTEM="linux"
-elif [[ $(uname -o) = "Android" ]]; then
-    _SYSTEM="android"
-elif [[ $(uname -o) = "Darwin" ]]; then
+_uname_s=$(uname -s)
+_uname_o=$(uname -o 2>/dev/null || echo "$_uname_s")
+if [[ $_uname_s == "Darwin" ]]; then
     _SYSTEM="darwin"
+elif [[ $_uname_o == "Android" ]]; then
+    _SYSTEM="android"
+elif [[ $_uname_o == "GNU/Linux" || $_uname_s == "Linux" ]]; then
+    _SYSTEM="linux"
 fi
-
-# Custom prompt
-PROMPT="%F{green}%m@%n[%D{%d/%m/%y}-%D{%I:%M:%S%p}]%F{white}(%~)%f%F{green}$%f"
+unset _uname_s _uname_o
 
 # Vim bindkeys
 bindkey -v
@@ -19,14 +19,14 @@ bindkey -v
 
 # Linux (terminal)
 if [[ $_SYSTEM = "linux" ]]; then
-    ORIGIN="/$HOME/data"
+    ORIGIN="$HOME/data"
     alias xx="xtrlock"
     alias open="xdg-open"
     alias pbcopy="xclip -selection clipboard"
     alias pbpaste="xclip -selection clipboard -o"
     export PATH="$HOME/.local/bin:$PATH"
 
-# Android (termux
+# Android (termux)
 elif [[ $_SYSTEM = "android" ]]; then
     ORIGIN="$HOME/storage/shared/data"
     alias mm="cd $HOME/storage/shared/Download"
@@ -170,18 +170,21 @@ setopt RM_STAR_SILENT
 alias csvv="vi -c 'set nowrap' -c 'set scrolloff=5' -c 'set number' -c '1split | wincmd w'"
 
 # Open Firefox with default websites
-alias fff="nohup firefox $ORIGIN/documents/internet/{google/mail.html,google/calendar.html} > /dev/null 2>&1 &; disown"
+fff() {
+    nohup firefox "$ORIGIN"/documents/internet/{google/mail.html,google/calendar.html} >/dev/null 2>&1 &
+    disown
+}
 
 # Complete and small ls with specific colors
-export LS_COLORS=$LS_COLORS:"di=1;97:fi=0;97:ex=0;97:no=0;90:"
+export LS_COLORS="$LS_COLORS:di=1;97:fi=0;97:ex=0;97:no=0;90:"
 alias l="ls --all --author --color=auto --group-directories-first --human-readable -l --size -v -1"
 alias ll="ls --all --color=auto --group-directories-first -v -1"
 
 # Music
-mpva() {find $ORIGIN/musics -type f -exec mpv --shuffle --no-video {} +}
-mpvc() {find $ORIGIN/musics/classical -type f -exec mpv --shuffle --no-video {} +}
-mpvo() {find $ORIGIN/musics/others -type f -exec mpv --shuffle --no-video {} +}
-mpvs() {find $ORIGIN/musics -type f -ipath "*$1*" -exec mpv --shuffle --no-video {} +}
+mpva() { find "$ORIGIN/musics" -type f -exec mpv --shuffle --no-video {} +; }
+mpvc() { find "$ORIGIN/musics/classical" -type f -exec mpv --shuffle --no-video {} +; }
+mpvo() { find "$ORIGIN/musics/others" -type f -exec mpv --shuffle --no-video {} +; }
+mpvs() { find "$ORIGIN/musics" -type f -ipath "*$1*" -exec mpv --shuffle --no-video {} +; }
 
 # Others
 alias ...="cd ../../"
@@ -200,11 +203,11 @@ alias vim=nvim
 # ------------------------------------------
 
 # Private SSH variables are in a .zsh file located in $ZSH_CUSTOM
-alias ssh0="ssh $_SSH_USER_NAME@$_SSH_PUBLIC_IP -p $_SSH_PORT"
-alias sshF="sshfs $_SSH_USER_NAME@$_SSH_PUBLIC_IP: -p $_SSH_PORT ssh_folder"
-alias sshX="ssh -X $_SSH_USER_NAME@$_SSH_PUBLIC_IP -p $_SSH_PORT"
-sshL() { ssh -L 16006:127.0.0.1:$1 $_SSH_USER_NAME@$_SSH_PUBLIC_IP -p $_SSH_PORT; }
-scpp() { scp -r -p -P $_SSH_PORT $1 $_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/Downloads; }
+alias ssh0="ssh \$_SSH_USER_NAME@\$_SSH_PUBLIC_IP -p \$_SSH_PORT"
+alias sshF="sshfs \$_SSH_USER_NAME@\$_SSH_PUBLIC_IP: -p \$_SSH_PORT ssh_folder"
+alias sshX="ssh -X \$_SSH_USER_NAME@\$_SSH_PUBLIC_IP -p \$_SSH_PORT"
+sshL() { ssh -L "16006:127.0.0.1:$1" "$_SSH_USER_NAME@$_SSH_PUBLIC_IP" -p "$_SSH_PORT"; }
+scpp() { scp -r -p -P "$_SSH_PORT" "$1" "$_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/Downloads"; }
 
 # !!!!! WARNING !!!!!
 # The rsync command is powerful but dangerous if misused
@@ -212,11 +215,14 @@ scpp() { scp -r -p -P $_SSH_PORT $1 $_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/Downloads;
 # The best sync method is -c (--checksum), but it is costly
 bbb() {
     if [[ "$1" = "android" ]]; then
-        rsync -ivhc --cc=xxh128 --recursive --delete --iconv=utf-8,utf-8-mac --rsync-path=/opt/homebrew/bin/rsync --exclude={"/backup/*","/git_apps/*","/miscellaneous/*"} -e "ssh -p $_SSH_PORT" $_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/data/ $ORIGIN/
+        rsync -ivhc --cc=xxh128 --recursive --delete --iconv=utf-8,utf-8-mac --rsync-path=/opt/homebrew/bin/rsync --exclude={"/backup/*","/git_apps/*","/miscellaneous/*"} -e "ssh -p $_SSH_PORT" "$_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/data/" "$ORIGIN/"
     elif [[ "$1" = "backup" ]]; then
-        rsync -ivhc --cc=xxh128 --recursive --delete --iconv=utf-8,utf-8-mac --exclude={"/backup/completed/*","/documents/*","/git_apps/*"} $ORIGIN/ /Volumes/backup/data/
+        rsync -ivhc --cc=xxh128 --recursive --delete --iconv=utf-8,utf-8-mac --exclude={"/backup/completed/*","/documents/*","/git_apps/*"} "$ORIGIN/" /Volumes/backup/data/
     elif [[ "$1" = "safety" ]]; then
-        rsync -ivhc --cc=xxh128 --recursive --delete --exclude={"/backup/completed/*","/git_apps/*"} $ORIGIN/ /Volumes/safety/data/
+        rsync -ivhc --cc=xxh128 --recursive --delete --exclude={"/backup/completed/*","/git_apps/*"} "$ORIGIN/" /Volumes/safety/data/
+    else
+        echo "Usage: bbb {android|backup|safety}" >&2
+        return 1
     fi
 }
 
@@ -226,15 +232,15 @@ bbb() {
 
 # Clear string: replace [spaces / tabs / new lines], special characters, etc., by _, and remove capital letters
 clearString() {
-    echo $1 | sed -z "s/\n/_/g" | sed -E -e "s/-/ /g" | sed -E -e "s/'/ /g" | sed -E -e "s/\: |\-|\, |\; |\. /_/g" | sed -E -e "s/[[:blank:]]+/_/g" | sed -e "s/\(.*\)/\L\1/" | sed "s/.$//" | pbcopy
+    echo "$1" | sed -E -e "s/[-':;,.]+/_/g" -e "s/[[:space:]]+/_/g" -e 's/_+/_/g' -e 's/_$//' | tr '[:upper:]' '[:lower:]' | pbcopy
 }
 
 # Clear string of all files present in current path
 clearStringAll() {
-    for file_path in *; do (
-        clearString $file_path
-        mv $file_path $(pbpaste)
-    ); done
+    for file_path in *; do
+        clearString "$file_path"
+        mv -- "$file_path" "$(pbpaste)"
+    done
 }
 
 # Clear thumbnails folders
@@ -245,35 +251,35 @@ clearThumbnails() {
 
 # Main command to compile latex projects (or use latexmk)
 # bibtex / biber: both can be used, depending on how the bibliography is made
-# A different compilator can be used, as pdflatex for example
+# A different compiler can be used, as pdflatex for example
 compiletex() {
     lualatex "$1.tex"
     biber "$1"
     makeglossaries "$1"
-    makeindex $1.nlo -s nomencl.ist -o $1.nls
+    makeindex "$1.nlo" -s nomencl.ist -o "$1.nls"
     lualatex "$1.tex"
     lualatex "$1.tex"
 }
 
 # Countdown function, argument is in seconds
 countdown() {
-    countdown=$1
-    while [ $countdown -gt 0 ]; do
-        echo -ne "\r--> $countdown <-- "
-        countdown=$((countdown - 1))
+    local remaining=$1
+    while ((remaining > 0)); do
+        printf "\r--> %d <-- " "$remaining"
+        ((remaining--))
         sleep 1
     done
-    echo -ne "\r--> 0 <-- \n"
+    printf "\r--> 0 <-- \n"
 }
 
 # Copy folder with progress bar
-cpr() { rsync --archive --human-readable --info=progress2 $1 $2; }
+cpr() { rsync --archive --human-readable --info=progress2 "$1" "$2"; }
 
 # Find $1 largest files
-duuu() { find . -type f -exec du -h {} + | sort -rh | head -n $1; }
+duuu() { find . -type f -exec du -h {} + | sort -rh | head -n "$1"; }
 
 # Fatal kill
-fatalKill() { ps aux | grep $1 | grep -v grep | awk "{print $2}" | xargs kill -9; }
+fatalKill() { ps aux | grep "$1" | grep -v grep | awk '{print $2}' | xargs kill -9; }
 
 # Find files and folders, case insensitive
 findd() { find . -iname "*$1*" 2>/dev/null; }
@@ -283,16 +289,16 @@ findd() { find . -iname "*$1*" 2>/dev/null; }
 findPID() { lsof -t -c "$@"; }
 
 # Find files of a given extension
-findSameExtension() { find . -iname \*.$1; }
+findSameExtension() { find . -iname "*.$1"; }
 
 # Get command history
-getHistory() { history | awk "{print $2}" | sort | uniq -c | sort -nr | head -n $1; }
+getHistory() { history | awk '{print $2}' | sort | uniq -c | sort -nr | head -n "$1"; }
 
 # Special grep for projects
 grepp() { grep -R "$1" . --ignore-case --exclude-dir={.git,.venv,data,docs,materials,resources}; }
 
 # Create a password of size $1
-pwgenn() { pwgen -cny --secure $1 1 | pbcopy; }
+pwgenn() { pwgen -cny --secure "$1" 1 | pbcopy; }
 
 # Clean Python files
 pyclean() {
@@ -305,33 +311,33 @@ pyclean() {
 # Rename all files in a folder
 # ls -tr: oldest modified file will have index 0
 renameAll() {
-    idx=0
+    local idx=0 nb_files nb_padding extension idx_name suffix file
     nb_files=$(($(ls -1 | wc -l) - 1))
-    nb_padding=$(echo "${#nb_files}")
-    find . -maxdepth 1 -type f | xargs -r ls -tr | while read file; do
-        extension=$(python -c "import os, sys; _, ext = os.path.splitext(sys.argv[1]); print(ext)" $file)
-        idx_name=$(printf "%0${nb_padding}d\n" $idx)
-        if [ -n "$1" ]; then
-            mv $file ${idx_name}_$1${extension}
-        else
-            mv $file ${idx_name}$1${extension}
-        fi
-        idx=$((idx + 1))
+    nb_padding=${#nb_files}
+    suffix="${1:+_$1}"
+    # Use zsh glob qualifier to sort by mtime, oldest first (Om = reverse mtime order)
+    for file in *(.Om); do
+        extension="${file:e}"
+        [[ -n "$extension" ]] && extension=".$extension"
+        idx_name=$(printf "%0${nb_padding}d" "$idx")
+        mv -- "$file" "${idx_name}${suffix}${extension}"
+        ((idx++))
     done
 }
 
 # Clean Tex files, argument for maxdepth
 rmtex() {
-    find . -maxdepth $1 -name "main-blx.bib" -delete
+    local depth="${1:-1}"
+    find . -maxdepth "$depth" -name "main-blx.bib" -delete
     if [[ $_SYSTEM = "darwin" ]]; then
-        find -E . -maxdepth $1 -regex ".*\.(aux|dvi|log|out|toc|bbl|blg|synctex.gz|acn|acr|alg|bcf|glg|glo|gls|ist|run.xml|nav|snm|vrb|fls|fdb_latexmk|brf|loc|soc|ilg|ind|nlo|nls|lof|lot|maf|mtc.*)" -delete
+        find -E . -maxdepth "$depth" -regex ".*\.(aux|dvi|log|out|toc|bbl|blg|synctex.gz|acn|acr|alg|bcf|glg|glo|gls|ist|run.xml|nav|snm|vrb|fls|fdb_latexmk|brf|loc|soc|ilg|ind|nlo|nls|lof|lot|maf|mtc.*)" -delete
     else
-        find . -maxdepth $1 -regex ".*\.\(aux\|dvi\|log\|out\|toc\|bbl\|blg\|synctex.gz\|acn\|acr\|alg\|bcf\|glg\|glo\|gls\|ist\|run.xml\|nav\|snm\|vrb\|fls\|fdb_latexmk\|brf\|loc\|soc\|ilg\|ind\|nlo\|nls\|lof\|lot\|maf\|mtc.*\)" -delete
+        find . -maxdepth "$depth" -regextype posix-extended -regex ".*\.(aux|dvi|log|out|toc|bbl|blg|synctex.gz|acn|acr|alg|bcf|glg|glo|gls|ist|run.xml|nav|snm|vrb|fls|fdb_latexmk|brf|loc|soc|ilg|ind|nlo|nls|lof|lot|maf|mtc.*)" -delete
     fi
 }
 
 # Functions to download videos (format index, link)
-yyy() { yt-dlp --verbose --output "%(title)s.mp3" $2 -f $1 -x --audio-format "mp3" --rm-cache-dir; }
+yyy() { yt-dlp --verbose --output "%(title)s.mp3" "$2" -f "$1" -x --audio-format "mp3" --rm-cache-dir; }
 
 # fzf
 # ------------------------------------------
@@ -339,29 +345,35 @@ yyy() { yt-dlp --verbose --output "%(title)s.mp3" $2 -f $1 -x --audio-format "mp
 
 # Find directory
 cdd() {
-    IFS=$'\n' directories=($(find $ORIGIN/ -type d | fzf-tmux --query="$1" --multi --select-1 --exit-0))
-    [[ -n "$directories" ]] && cd "${directories[@]}"
+    local IFS=$'\n'
+    local directories
+    directories=($(find "$ORIGIN/" -type d | fzf-tmux --query="$1" --select-1 --exit-0))
+    [[ -n "$directories" ]] && cd "${directories[1]}"
 }
 
 # Open firefox favorites with fzf
 ff() {
-    IFS=$'\n' files=($(find $ORIGIN/documents/internet -name "*.html" | fzf-tmux --query="$1" --multi --select-1 --exit-0))
+    local IFS=$'\n'
+    local files
+    files=($(find "$ORIGIN/documents/internet" -name "*.html" | fzf-tmux --query="$1" --multi --select-1 --exit-0))
     [[ -n "$files" ]] && firefox "${files[@]}"
 }
 
 # Open firefox favorites with fzf (private window)
 ffp() {
-    IFS=$'\n' files=($(find $ORIGIN/documents/internet -name "*.html" | fzf-tmux --query="$1" --multi --select-1 --exit-0))
+    local IFS=$'\n'
+    local files
+    files=($(find "$ORIGIN/documents/internet" -name "*.html" | fzf-tmux --query="$1" --multi --select-1 --exit-0))
     [[ -n "$files" ]] && firefox --private-window "${files[@]}"
 }
 
 # fkill - kill process (from fzf)
 fkill() {
     local pid
-    pid=$(ps -ef | sed 1d | fzf -m | awk "{print $2}")
+    pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
 
-    if [[ "x$pid" != "x" ]]; then
-        echo $pid | xargs kill -${1:-9}
+    if [[ -n "$pid" ]]; then
+        echo "$pid" | xargs kill -${1:-9}
     fi
 }
 
@@ -379,13 +391,17 @@ FZF-EOF"
 
 # Open files with nvim
 vv() {
-    IFS=$'\n' files=($(find $ORIGIN/ -type f | fzf-tmux --query="$1" --multi --select-1 --exit-0))
+    local IFS=$'\n'
+    local files
+    files=($(find "$ORIGIN/" -type f | fzf-tmux --query="$1" --multi --select-1 --exit-0))
     [[ -n "$files" ]] && vim "${files[@]}"
 }
 
 # Open files (general)
 oo() {
-    IFS=$'\n' files=($(find . -type f | fzf-tmux --query="$1" --multi --select-1 --exit-0))
+    local IFS=$'\n'
+    local files
+    files=($(find . -type f | fzf-tmux --query="$1" --multi --select-1 --exit-0))
     [[ -n "$files" ]] && open "${files[@]}"
 }
 
@@ -406,36 +422,37 @@ gitd_() {
     git push
 }
 gitpp() { for i in */.git; do (
-    echo $i
-    cd $i/..
+    echo "$i"
+    cd "$i/.." || continue
     git pull
 ); done; }
 gitss() { for i in */.git; do (
-    echo "-----> " $i
-    cd $i/../
+    echo "-----> $i"
+    cd "$i/.." || continue
     git status --ignored
 ); done; }
 
-# Execute git pull on folders
+# Execute git command on folders
 _private_git_command() {
-    cd $1
-    for i in */.git; do
-        (
-            printf "$i\n"
-            cd $i/..
-            git $2
-            echo ""
-        )
-    done
+    (
+        cd "$1" || return
+        for i in */.git; do
+            (
+                printf "%s\n" "$i"
+                cd "$i/.." || exit
+                git "$2"
+                echo ""
+            )
+        done
+    )
 }
 
 # Argument is the command to execute (status, pull, etc.)
 main_git() {
     printf "\nMAIN GIT\n"
     printf "------------------------------------------\n\n"
-    _private_git_command $ORIGIN/git_apps $1
-    _private_git_command $ORIGIN/git_apps/_custom $1
-    cd $ORIGIN
+    _private_git_command "$ORIGIN/git_apps" "$1"
+    _private_git_command "$ORIGIN/git_apps/_custom" "$1"
 }
 
 # Main update
@@ -448,14 +465,14 @@ main_update() {
 
     if [[ $_SYSTEM = "android" ]]; then
         printf "---> PKG\n"
-        pkg upgrade -y
         pkg update -y
+        pkg upgrade -y
 
     elif [[ $_SYSTEM = "linux" ]]; then
         printf "---> APT\n"
         sudo apt -y update
         sudo apt -y upgrade
-        sudo apt dist-upgrade
+        sudo apt -y dist-upgrade
         # sudo update-grub;  # Only if necessary
 
     elif [[ $_SYSTEM = "darwin" ]]; then
@@ -480,14 +497,14 @@ main_compile() {
 
     if [[ $_SYSTEM = "linux" ]]; then
         printf "---> Katago\n"
-        cd $ORIGIN/git_apps/KataGo/cpp
-        if [[ ! -d "./build" ]]; then mkdir build; fi
-        cd build
-        cmake .. -DUSE_BACKEND=CUDA -DCUDNN_INCLUDE_DIR=/usr/local/cuda/include -DCUDNN_LIBRARY=/usr/local/cuda/lib64/libcudnn.so
-        make
+        (
+            cd "$ORIGIN/git_apps/KataGo/cpp" || return
+            mkdir -p build
+            cd build || return
+            cmake .. -DUSE_BACKEND=CUDA -DCUDNN_INCLUDE_DIR=/usr/local/cuda/include -DCUDNN_LIBRARY=/usr/local/cuda/lib64/libcudnn.so
+            make
+        )
     fi
-
-    cd $ORIGIN
 }
 
 # Main clean
@@ -557,7 +574,7 @@ alias mdd="python -m rich.markdown"
 
 # Automatically activate virtual environment
 VENV_PATH="$HOME/.venv"
-if [ -d "$VENV_PATH" ]; then
+if [[ -f "$VENV_PATH/bin/activate" ]]; then
     source "$VENV_PATH/bin/activate"
 fi
 
