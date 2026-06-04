@@ -62,7 +62,7 @@ vim.opt.cursorline = true
 vim.opt.colorcolumn = "79"
 
 -- Minimal number of screen lines to keep above and below the cursor
-vim.opt.scrolloff = 0
+vim.opt.scrolloff = 4
 
 -- Ask to save file if unsaved changes
 vim.opt.confirm = true
@@ -113,9 +113,6 @@ vim.keymap.set("v", ">", ">gv", { silent = true })
 
 -- Diagnostic keymaps
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
-
--- Compile tex document
-vim.keymap.set("n", "<leader>b", ":LspTexlabBuild<CR>", { noremap = true, silent = true })
 
 -- Disable arrow keys in normal mode
 -- vim.keymap.set("n", "<left>", "<cmd>echo "Use h to move!!"<CR>")
@@ -177,10 +174,10 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 })
 
 -- Prevent editing in readonly mode
-vim.api.nvim_create_autocmd("BufEnter", {
+vim.api.nvim_create_autocmd("BufReadPost", {
 	callback = function()
-		if vim.o.readonly then
-			vim.opt_local.modifiable = false
+		if vim.bo.readonly then
+			vim.bo.modifiable = false
 		end
 	end,
 })
@@ -323,9 +320,11 @@ require("lazy").setup({
 		-- ------------------------------------------
 		{
 			"ibhagwan/fzf-lua",
-			config = function()
-				vim.keymap.set("n", "<leader>o", ":FzfLua files<cr>")
-			end,
+			cmd = "FzfLua",
+			keys = {
+				{ "<leader>o", ":FzfLua files<cr>", desc = "FzfLua files" },
+			},
+			config = true,
 		},
 
 		-- git-conflict.nvim
@@ -334,6 +333,7 @@ require("lazy").setup({
 		{
 			"akinsho/git-conflict.nvim",
 			version = "*",
+			event = "BufReadPost",
 			config = true,
 		},
 
@@ -343,6 +343,7 @@ require("lazy").setup({
 		{
 			"lukas-reineke/indent-blankline.nvim",
 			main = "ibl",
+			event = "BufReadPost",
 			---@module "ibl"
 			---@type ibl.config
 			opts = {},
@@ -385,7 +386,6 @@ require("lazy").setup({
 			"stevearc/oil.nvim",
 			---@module "oil"
 			---@type oil.SetupOpts
-			lazy = false,
 			opts = {
 				default_file_explorer = true,
 				delete_to_trash = false,
@@ -462,12 +462,12 @@ require("lazy").setup({
 			config = function()
 				require("conform").setup({
 					formatters_by_ft = {
-						bash = { "shfmt", lsp_format = "fallback" },
 						bib = { "bibtex-tidy", lsp_format = "fallback" },
 						lua = { "stylua", lsp_format = "fallback" },
 						plaintex = { "tex-fmt", lsp_format = "fallback" },
 						python = { "ruff_fix", "ruff_organize_imports", "ruff_format", lsp_format = "fallback" },
 						sh = { "shfmt", lsp_format = "fallback" },
+						bash = { "shfmt", lsp_format = "fallback" },
 						zsh = { "shfmt", lsp_format = "fallback" },
 					},
 					default_format_opts = {
@@ -501,6 +501,7 @@ require("lazy").setup({
 		-- ------------------------------------------
 		{
 			"neovim/nvim-lspconfig",
+			dependencies = { "hrsh7th/cmp-nvim-lsp" },
 			config = function()
 				local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
@@ -547,6 +548,13 @@ require("lazy").setup({
 									vim.notify("Build " .. texlab_build_status[result.status], vim.log.levels.INFO)
 								end, bufnr)
 							end, { desc = "Build the current buffer" })
+							-- Buffer-local keymap to compile tex
+							vim.keymap.set("n", "<leader>b", ":LspTexlabBuild<CR>", {
+								buffer = bufnr,
+								noremap = true,
+								silent = true,
+								desc = "Texlab build",
+							})
 						end
 					end,
 				})
