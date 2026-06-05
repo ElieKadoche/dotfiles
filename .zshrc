@@ -13,6 +13,9 @@ unset _uname_s _uname_o
 # Vim bindkeys
 bindkey -v
 
+# Prompt
+PROMPT="%B%F{white}%n@%m %b%F{white}%1~%B%F{white} \$%f%b "
+
 # System specific
 # ------------------------------------------
 # ------------------------------------------
