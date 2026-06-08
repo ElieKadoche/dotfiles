@@ -47,6 +47,7 @@ brew install ncdu
 brew install neovim
 brew install nmap
 brew install node
+brew install ocrmypdf
 brew install ollama
 brew install openjdk
 brew install openssh
