@@ -473,10 +473,16 @@ require("lazy").setup({
 					default_format_opts = {
 						lsp_format = "fallback",
 					},
-					format_on_save = {
-						timeout_ms = 500,
-						lsp_format = "fallback",
-					},
+					format_on_save = function(bufnr)
+						local filename = vim.api.nvim_buf_get_name(bufnr)
+						if filename:match("%.zsh_history$") then
+							return nil
+						end
+						return {
+							timeout_ms = 500,
+							lsp_format = "fallback",
+						}
+					end,
 					formatters = {
 						ruff_format = {
 							append_args = { "--line-length", "79" },
