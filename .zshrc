@@ -235,7 +235,7 @@ bbb() {
 
 # Clear string: replace [spaces / tabs / new lines], special characters, etc., by _, and remove capital letters
 clearString() {
-    echo "$1" | sed -E -e "s/[-':;,.]+/_/g" -e "s/[[:space:]]+/_/g" -e 's/_+/_/g' -e 's/_$//' | tr '[:upper:]' '[:lower:]' | pbcopy
+    echo "$1" | tr '\n' '_' | sed -E -e "s/[-':;,.]+/_/g" -e "s/[[:space:]]+/_/g" -e 's/_+/_/g' -e 's/_$//' -e 's/^_//' | tr '[:upper:]' '[:lower:]' | pbcopy
 }
 
 # Clear string of all files present in current path
