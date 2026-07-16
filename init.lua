@@ -227,6 +227,7 @@ require("lazy").setup({
 					"gitcommit",
 					"gitignore",
 					"html",
+					"latex",
 					"lua",
 					"make",
 					"markdown",
@@ -241,9 +242,14 @@ require("lazy").setup({
 				-- Install
 				require("nvim-treesitter").install(languages)
 
+				-- Additional file types that should trigger treesitter
+				local ft_patterns = vim.deepcopy(languages)
+				table.insert(ft_patterns, "tex")
+				table.insert(ft_patterns, "plaintex")
+
 				-- Launch highlights + folds + indentation
 				vim.api.nvim_create_autocmd("FileType", {
-					pattern = languages,
+					pattern = ft_patterns,
 					callback = function()
 						vim.treesitter.start()
 						vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
