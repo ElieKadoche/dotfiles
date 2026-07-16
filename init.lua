@@ -245,7 +245,6 @@ require("lazy").setup({
 				-- Additional file types that should trigger treesitter
 				local ft_patterns = vim.deepcopy(languages)
 				table.insert(ft_patterns, "tex")
-				table.insert(ft_patterns, "plaintex")
 
 				-- Launch highlights + folds + indentation
 				vim.api.nvim_create_autocmd("FileType", {
