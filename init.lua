@@ -505,12 +505,13 @@ require("lazy").setup({
 			config = function()
 				require("conform").setup({
 					formatters_by_ft = {
+						bash = { "shfmt", lsp_format = "fallback" },
 						bib = { "bibtex-tidy", lsp_format = "fallback" },
 						lua = { "stylua", lsp_format = "fallback" },
 						plaintex = { "tex-fmt", lsp_format = "fallback" },
 						python = { "ruff_fix", "ruff_organize_imports", "ruff_format", lsp_format = "fallback" },
 						sh = { "shfmt", lsp_format = "fallback" },
-						bash = { "shfmt", lsp_format = "fallback" },
+						tex = { "tex-fmt", lsp_format = "fallback" },
 						zsh = { "shfmt", lsp_format = "fallback" },
 					},
 					default_format_opts = {
@@ -538,6 +539,9 @@ require("lazy").setup({
 								"D413",
 								"W391",
 							},
+						},
+						["tex-fmt"] = {
+							append_args = { "--nowrap" },
 						},
 					},
 				})
