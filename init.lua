@@ -528,6 +528,9 @@ require("lazy").setup({
 						}
 					end,
 					formatters = {
+						["bibtex-tidy"] = {
+							append_args = { "--sort" },
+						},
 						ruff_format = {
 							append_args = { "--line-length", "79" },
 						},
