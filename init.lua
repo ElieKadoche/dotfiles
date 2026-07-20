@@ -875,12 +875,14 @@ vim.api.nvim_set_hl(0, "Pmenu", { bg = "#101010" })
 
 -- Syntax
 vim.api.nvim_set_hl(0, "@function.method.call.python", { bg = "#000000", fg = "#ff1493" })
+vim.api.nvim_set_hl(0, "@string.documentation", { bg = "#000000", fg = "#729fcf" })
 vim.api.nvim_set_hl(0, "@variable.member.python", { bg = "#000000", fg = "#ff00ff" })
 vim.api.nvim_set_hl(0, "@variable.python", { bg = "#000000", fg = "#00ffff" })
 vim.api.nvim_set_hl(0, "Constant", { bg = "#000000", fg = "#729fcf" })
 vim.api.nvim_set_hl(0, "Identifier", { fg = "#ffffff" })
 vim.api.nvim_set_hl(0, "Special", { bg = "#000000", fg = "#00ff00" })
 vim.api.nvim_set_hl(0, "Statement", { bg = "#000000", fg = "#ff00ff" })
+vim.api.nvim_set_hl(0, "String", { bg = "#000000", fg = "#ffffff" })
 
 -- Spelling
 vim.api.nvim_set_hl(0, "SpellBad", { underline = true, sp = "#ff0000" })
