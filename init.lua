@@ -878,8 +878,14 @@ vim.api.nvim_set_hl(0, "Pmenu", { bg = "#101010" })
 vim.api.nvim_set_hl(0, "StatusLine", { bg = "#00ff00", fg = "#000000", bold = true })
 vim.api.nvim_set_hl(0, "TabLineFill", { bg = "#000000" })
 
+-- Search
+vim.api.nvim_set_hl(0, "Search", { bg = "#ff0000", fg = "#000000" })
+vim.api.nvim_set_hl(0, "CurSearch", { bg = "#ff0000", fg = "#ffffff" })
+vim.api.nvim_set_hl(0, "IncSearch", { bg = "#ff0000", fg = "#ffffff" })
+
 -- Syntax
 vim.api.nvim_set_hl(0, "@function.method.call.python", { bg = "#000000", fg = "#ff1493" })
+vim.api.nvim_set_hl(0, "@module.python", { bg = "#000000", fg = "#ffffff" })
 vim.api.nvim_set_hl(0, "@string.documentation", { bg = "#000000", fg = "#729fcf" })
 vim.api.nvim_set_hl(0, "@variable.member.python", { bg = "#000000", fg = "#ff00ff" })
 vim.api.nvim_set_hl(0, "@variable.python", { bg = "#000000", fg = "#00ffff" })
