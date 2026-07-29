@@ -877,6 +877,7 @@ vim.api.nvim_set_hl(0, "MsgArea", { bg = "#000000", fg = "#ffffff" })
 vim.api.nvim_set_hl(0, "Pmenu", { bg = "#101010" })
 vim.api.nvim_set_hl(0, "StatusLine", { bg = "#00ff00", fg = "#000000", bold = true })
 vim.api.nvim_set_hl(0, "TabLineFill", { bg = "#000000" })
+vim.api.nvim_set_hl(0, "Type", { bg = "#000000", fg = "#008080" })
 
 -- Search
 vim.api.nvim_set_hl(0, "Search", { bg = "#ff0000", fg = "#000000" })
