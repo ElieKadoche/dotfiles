@@ -880,9 +880,9 @@ vim.api.nvim_set_hl(0, "TabLineFill", { bg = "#000000" })
 vim.api.nvim_set_hl(0, "Type", { bg = "#000000", fg = "#008080" })
 
 -- Search
-vim.api.nvim_set_hl(0, "Search", { bg = "#ff0000", fg = "#000000" })
-vim.api.nvim_set_hl(0, "CurSearch", { bg = "#ff0000", fg = "#ffffff" })
-vim.api.nvim_set_hl(0, "IncSearch", { bg = "#ff0000", fg = "#ffffff" })
+vim.api.nvim_set_hl(0, "Search", { bg = "#729FCF", fg = "#000000" })
+vim.api.nvim_set_hl(0, "CurSearch", { bg = "#729FCF", fg = "#ff00ff" })
+vim.api.nvim_set_hl(0, "IncSearch", { bg = "#729FCF", fg = "#ffffff" })
 
 -- Syntax
 vim.api.nvim_set_hl(0, "@function.method.call.python", { bg = "#000000", fg = "#ff1493" })
