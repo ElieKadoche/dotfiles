@@ -827,7 +827,7 @@ require("lazy").setup({
 					luasnip.snippet("code", fmt([[import code; code.interact(local=locals())]], {})),
 					luasnip.snippet(
 						"debug",
-						fmt([[import ipdb; ipdb.set_trace(context={})]], { luasnip.insert_node(1) })
+						fmt([[import ipdb; ipdb.set_trace(context={})  # fmt: off]], { luasnip.insert_node(1) })
 					),
 				})
 
