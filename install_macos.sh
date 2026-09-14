@@ -21,6 +21,7 @@ brew install python3
 
 # Install Brew packages
 brew install bash-language-server
+brew install biber
 brew install bibtex-tidy
 brew install clang-format
 brew install cmake
