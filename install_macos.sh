@@ -50,6 +50,7 @@ brew install nmap
 brew install node
 brew install ocrmypdf
 brew install ollama
+brew install opencode
 brew install openjdk
 brew install openssh
 brew install pandoc
@@ -105,10 +106,6 @@ brew install --cask font-source-sans-pro
 # LaTeX
 # brew install texlive
 brew install --cask mactex
-
-# Opencode
-brew install anomalyco/tap/opencode
-ollama launch opencode --config
 
 # Change default parameters
 defaults write -g NSAutomaticWindowAnimationsEnabled -bool false
