@@ -48,19 +48,4 @@ cp init.lua ~/.config/nvim/init.lua
 echo "Configuring Python..."
 
 # TODO: carefully choose the python version
-python3 -m venv ~/.venv
-
-# Virtual environment
-source ~/.venv/bin/activate
-
-# Install required packages
-uv pip install autopep8
-uv pip install bandit
-uv pip install isort
-uv pip install neovim
-uv pip install pycodestyle
-uv pip install pydocstyle
-uv pip install python-lsp-isort
-uv pip install python-lsp-ruff
-uv pip install "python-lsp-server[all]"
-uv pip install ruff
+uv venv .venv --python 3.13
