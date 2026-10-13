@@ -457,6 +457,7 @@ main_update() {
 
     printf "---> NPM\n"
     npm install -g npm@latest
+    npx skills update
 
     if [[ $_SYSTEM = "android" ]]; then
         printf "---> PKG\n"
