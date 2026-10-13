@@ -51,6 +51,7 @@ elif [[ $_SYSTEM = "darwin" ]]; then
     ORIGIN="$HOME/data"
     alias sed="gsed"
     export PATH="/opt/homebrew/bin:$PATH"
+    export PATH="/opt/homebrew/sbin:$PATH"
     export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
     export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
 
