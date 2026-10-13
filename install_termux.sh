@@ -1,8 +1,15 @@
 #!/bin/zsh
+#
+echo "TERMUX INSTALLATION SCRIPT"
+
+# General
+# ------------------------------------------
+
+echo "Configuring system..."
 
 # Update
-pkg upgrade
-pkg update
+pkg update -y
+pkg upgrade -y
 
 # zsh installation
 pkg install -y zsh
@@ -14,17 +21,15 @@ pkg install -y neovim
 
 # Activate storage
 termux-setup-storage
-mkdir $HOME/storage/shared/data
+mkdir -p $HOME/storage/shared/data
 
-# Launch common script
-./install_apps_common.sh
-
-# You can launch the script from here
-
-# pkg
+# PKG packages
 # ------------------------------------------
 
-echo "Running pkg packages..."
+echo "Installing packages..."
+
+# Needed before packages from the x11 repository
+pkg install -y x11-repo
 
 pkg install -y binutils-is-llvm
 pkg install -y build-essential
@@ -68,7 +73,6 @@ pkg install -y rsync
 pkg install -y ruby
 pkg install -y ruff
 pkg install -y rust
-pkg install -y rust
 pkg install -y screen
 pkg install -y shfmt
 pkg install -y stylua
@@ -83,29 +87,18 @@ pkg install -y tree-sitter
 pkg install -y unrar
 pkg install -y unzip
 pkg install -y uv
-pkg install -y x11-repo
 pkg install -y zip
 
 # LaTeX
 pkg install -y texlive-installer
 termux-install-tl
 
-# Python
-# Check https://github.com/termux/termux-packages/discussions/19126
-# ------------------------------------------
-
-# Install specific packages
-pip3 install setuptools wheel packaging pyproject_metadata cython meson-python versioner
-
-# Termux configuration
-# ------------------------------------------
-
-echo "Configuring Termux..."
-
-# Keyboard
-# Enable / disable extra keys (see ek custom function)
-
-# Download fira code font ttf file
-cp FiraCode-Retina.ttf ~/.termux/font.ttf
-
+# Update settings
 termux-reload-settings
+
+# Launch common script
+./install_common.sh
+
+# Others
+# Enable / disable extra keys (see ek custom function)
+# mkdir -p ~/.termux; cp FiraCode-Retina.ttf ~/.termux/font.ttf

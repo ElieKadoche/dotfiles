@@ -1,4 +1,11 @@
 #!/bin/zsh
+#
+echo "MACOS INSTALLATION SCRIPT"
+
+# General
+# ------------------------------------------
+
+echo "Configuring system..."
 
 # Command line tools
 xcode-select --install
@@ -9,15 +16,16 @@ sudo softwareupdate --install-rosetta
 # Install Homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# Install ZSH
-brew install zsh
-chsh -s /usr/local/bin/zsh
+# Make brew available
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# Brew packages
+# ------------------------------------------
+
+echo "Installing packages..."
 
 # Check Python with system version
 brew install python3
-
-# Launch common script
-./install_apps_common.sh
 
 # Install Brew packages
 brew install bash-language-server
@@ -98,13 +106,17 @@ brew install --cask transmission
 brew install --cask vlc
 
 # Install fonts
-brew tap homebrew/cask-fonts
 brew install --cask font-fira-code
 brew install --cask font-source-sans-pro
 
 # LaTeX
 # brew install texlive
 brew install --cask mactex
+
+# System configuration
+# ------------------------------------------
+
+echo "Configuring MacOS..."
 
 # Change default parameters
 defaults write -g NSAutomaticWindowAnimationsEnabled -bool false
@@ -114,6 +126,9 @@ defaults write com.apple.finder AppleShowAllFiles YES
 defaults write com.apple.finder DisableAllAnimations -bool true
 defaults write com.apple.finder QuitMenuItem -bool YES
 defaults write com.apple.screencapture location ~/Downloads
+
+# Launch common script
+./install_common.sh
 
 # Others
 # Install https://github.com/textext/textext/releases

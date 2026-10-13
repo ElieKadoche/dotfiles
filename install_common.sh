@@ -1,13 +1,20 @@
 #!/bin/zsh
+#
+echo "COMMON INSTALLATION SCRIPT"
 
-# tmux configuration
+# General
+# ------------------------------------------
+
+echo "Configuring system..."
+
+# Global configurations
+cp .latexmkrc ~
 cp .tmux.conf ~
+cp .vimrc ~
+cp .zshrc ~
 
 # Install oh-my-zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-# ZSH configuration
-cp .zshrc ~
+RUNZSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 # Git
 # ------------------------------------------
