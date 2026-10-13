@@ -5,8 +5,6 @@ if [[ $_uname_s == "Darwin" ]]; then
     _SYSTEM="darwin"
 elif [[ $_uname_o == "Android" ]]; then
     _SYSTEM="android"
-elif [[ $_uname_o == "GNU/Linux" || $_uname_s == "Linux" ]]; then
-    _SYSTEM="linux"
 fi
 unset _uname_s _uname_o
 
@@ -20,17 +18,8 @@ PROMPT="%B%F{white}%n@%m %b%F{white}%1~%B%F{white} \$%f%b "
 # ------------------------------------------
 # ------------------------------------------
 
-# Linux (terminal)
-if [[ $_SYSTEM = "linux" ]]; then
-    ORIGIN="$HOME/data"
-    alias xx="xtrlock"
-    alias open="xdg-open"
-    alias pbcopy="xclip -selection clipboard"
-    alias pbpaste="xclip -selection clipboard -o"
-    export PATH="$HOME/.local/bin:$PATH"
-
 # Android (termux)
-elif [[ $_SYSTEM = "android" ]]; then
+if [[ $_SYSTEM = "android" ]]; then
     ORIGIN="$HOME/storage/shared/data"
     alias mm="cd $HOME/storage/shared/Download"
     alias pbcopy="termux-clipboard-set"
@@ -471,13 +460,6 @@ main_update() {
         pkg update -y
         pkg upgrade -y
 
-    elif [[ $_SYSTEM = "linux" ]]; then
-        printf "---> APT\n"
-        sudo apt -y update
-        sudo apt -y upgrade
-        sudo apt -y dist-upgrade
-        # sudo update-grub;  # Only if necessary
-
     elif [[ $_SYSTEM = "darwin" ]]; then
         printf "---> darwin\n"
         softwareupdate --install --all
@@ -487,26 +469,6 @@ main_update() {
         brew outdated
         brew upgrade
         brew upgrade --cask --greedy
-    fi
-}
-
-# Main compile
-# ------------------------------------------
-# ------------------------------------------
-
-main_compile() {
-    printf "\nMAIN COMPILE\n"
-    printf "------------------------------------------\n\n"
-
-    if [[ $_SYSTEM = "linux" ]]; then
-        printf "---> Katago\n"
-        (
-            cd "$ORIGIN/git_apps/KataGo/cpp" || return
-            mkdir -p build
-            cd build || return
-            cmake .. -DUSE_BACKEND=CUDA -DCUDNN_INCLUDE_DIR=/usr/local/cuda/include -DCUDNN_LIBRARY=/usr/local/cuda/lib64/libcudnn.so
-            make
-        )
     fi
 }
 
@@ -522,16 +484,6 @@ main_clean() {
         printf "---> PKG\n"
         pkg autoclean
         pkg clean
-
-    elif [[ $_SYSTEM = "linux" ]]; then
-        printf "---> LOGS\n"
-        journalctl --disk-usage
-        sudo journalctl --vacuum-time=1d
-
-        printf "---> APT\n"
-        sudo apt -y autoclean
-        sudo apt -y clean
-        sudo apt -y autoremove
 
     elif [[ $_SYSTEM = "darwin" ]]; then
         printf "---> Homebrew\n"
@@ -549,17 +501,12 @@ main_all() {
     main_git pull
     main_git status
     main_update
-    main_compile
     main_clean
     omz update
 
     printf "---> neovim\n"
     nvim --headless +"TSUpdate" +q
     nvim --headless +"Lazy sync" +q
-
-    if [[ $_SYSTEM = "linux" ]]; then
-        sudo killall -3 gnome-shell
-    fi
 }
 
 # Additional plugins
