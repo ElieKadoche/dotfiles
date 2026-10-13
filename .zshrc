@@ -70,6 +70,9 @@ export ZSH="$HOME/.oh-my-zsh"
 # Use hyphen-insensitive completion
 HYPHEN_INSENSITIVE="true"
 
+# Disable rm prompt
+setopt RM_STAR_SILENT
+
 # Plugins
 plugins=(
     colored-man-pages
