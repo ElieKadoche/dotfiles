@@ -2,6 +2,10 @@
 " Configuration for very large CSV files (combined with the following command)
 " alias csvv='vi -c "set nowrap" -c "set scrolloff=5" -c "set number" -c "1split | wincmd w"'
 
+" Load Vim defaults (syntax, filetype detection, sane backspace, etc.)
+" They are skipped when a vimrc exists
+source $VIMRUNTIME/defaults.vim
+
 " Enable termguicolors if supported
 if has("termguicolors")
   set termguicolors
@@ -27,10 +31,12 @@ hi Search guibg=green guifg=black
 set hlsearch
 
 " Set filetype for CSV
-autocmd BufRead,BufNewFile *.csv set filetype=csv
-
-" Enable CSV highlighting only for CSV files
-autocmd FileType csv call SetupCSVHighlight()
+augroup csv_highlight
+  autocmd!
+  autocmd BufRead,BufNewFile *.csv set filetype=csv
+  " Enable CSV highlighting only for CSV files
+  autocmd FileType csv call SetupCSVHighlight()
+augroup END
 
 " Special CSV function
 function! SetupCSVHighlight()
@@ -42,9 +48,9 @@ function! SetupCSVHighlight()
   let colors = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 202, 208, 214, 220, 226, 190, 154, 118]
 
   " Loop over columns
-  for i in range(0, 100)
+  for i in range(1, 100)
     " Build the match regex for the i-th column
-    let pattern = "\v" . join(repeat(["[^,]+"], i - 1), ",") . (i > 1 ? "," : "") . "\zs[^,]+"
+    let pattern = '\v^([^,]*,){' . (i - 1) . '}\zs[^,]*'
 
     " Create a unique name for each match group
     let colname = "col" . i
