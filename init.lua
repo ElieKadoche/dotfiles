@@ -539,8 +539,7 @@ require("lazy").setup({
 								"--select",
 								"E,W,F,D,I",
 								"--ignore",
-								"D413",
-								"W391",
+								"D413,W391",
 							},
 						},
 						["tex-fmt"] = {
@@ -843,7 +842,7 @@ require("lazy").setup({
 					mapping = cmp.mapping.preset.insert({
 						["<S-Space>"] = cmp.mapping.complete({}),
 						["<Tab>"] = cmp.mapping.confirm({ select = true }),
-						["<S-Uown>"] = cmp.mapping.select_next_item({}),
+						["<S-Down>"] = cmp.mapping.select_next_item({}),
 						["<S-Up>"] = cmp.mapping.select_prev_item(),
 						["<S-Left>"] = cmp.mapping.scroll_docs(-4),
 						["<S-Right>"] = cmp.mapping.scroll_docs(4),
