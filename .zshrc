@@ -1,18 +1,22 @@
 # Get system
 _uname_s=$(uname -s)
 _uname_o=$(uname -o 2>/dev/null || echo "$_uname_s")
+
+# Update system name
 if [[ $_uname_s == "Darwin" ]]; then
     _SYSTEM="darwin"
 elif [[ $_uname_o == "Android" ]]; then
     _SYSTEM="android"
 fi
-unset _uname_s _uname_o
 
-# Vim bindkeys
-bindkey -v
+# Unset unused variables
+unset _uname_s _uname_o
 
 # Prompt
 PROMPT="%B%F{white}%n@%m %b%F{white}%1~%B%F{white} \$%f%b "
+
+# Vim bindkeys
+bindkey -v
 
 # System specific
 # ------------------------------------------
@@ -21,16 +25,20 @@ PROMPT="%B%F{white}%n@%m %b%F{white}%1~%B%F{white} \$%f%b "
 # Android (termux)
 if [[ $_SYSTEM = "android" ]]; then
     ORIGIN="$HOME/storage/shared/data"
-    alias mm="cd $HOME/storage/shared/Download"
     alias pbcopy="termux-clipboard-set"
     alias open="termux-open"
     ek() {
+        local cfg
         # Do not display extra keys
         if [[ "$1" = 0 ]]; then
             cfg="extra-keys = [[]]\nfullscreen = true"
         # Display extra keys
         elif [[ "$1" = 1 ]]; then
             cfg="extra-keys = [['F1','F2','F3','F4','F5','F6','F9','F12'], ['ESC','ALT','FN','/','PGUP','KEYBOARD','UP','DRAWER'], ['TAB','CTRL','HOME','|','PGDN','LEFT','DOWN','RIGHT']]\nfullscreen = true"
+        # Otherwise
+        else
+            echo "Usage: ek {0|1}" >&2
+            return 1
         fi
         echo "$cfg" >~/.termux/termux.properties
         termux-reload-settings
@@ -40,7 +48,7 @@ if [[ $_SYSTEM = "android" ]]; then
 elif [[ $_SYSTEM = "darwin" ]]; then
     ORIGIN="$HOME/data"
     alias sed="gsed"
-    alias rmdsstore="find . -type f -name '*.DS_Store' -ls -delete"
+    export PATH="/opt/homebrew/bin:$PATH"
     export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
     export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
 fi
@@ -50,145 +58,22 @@ fi
 # ------------------------------------------
 # ------------------------------------------
 
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
-
-# Path to your Oh My Zsh installation.
+# Path to your Oh My Zsh installation
 export ZSH="$HOME/.oh-my-zsh"
 
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time Oh My Zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-# ZSH_THEME="robbyrussell"
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
+# Use hyphen-insensitive completion
 HYPHEN_INSENSITIVE="true"
 
-# Uncomment one of the following lines to change the auto-update behavior
-# zstyle ':omz:update' mode disabled  # disable automatic updates
-# zstyle ':omz:update' mode auto      # update automatically without asking
-# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
-
-# Uncomment the following line to change how often to auto-update (in days).
-# zstyle ':omz:update' frequency 13
-
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-HIST_STAMPS="dd/mm/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
+# Plugins
 plugins=(
     colored-man-pages
-    colorize
-    cp
     extract
-    genpass
-    git
-    vi-mode
+    zsh-autosuggestions
+    zsh-syntax-highlighting
 )
 
+# Source default
 source $ZSH/oh-my-zsh.sh
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='nvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch $(uname -m)"
-
-# Disable rm prompt
-setopt RM_STAR_SILENT
-
-# Aliases
-# ------------------------------------------
-# ------------------------------------------
-
-# Display CSV files
-alias csvv="vi -c 'set nowrap' -c 'set scrolloff=5' -c 'set number' -c '1split | wincmd w'"
-
-# Open Firefox with default websites
-fff() {
-    nohup firefox "$ORIGIN"/documents/internet/{google/mail.html,google/calendar.html} >/dev/null 2>&1 &
-    disown
-}
-
-# Complete and small ls with specific colors
-export LS_COLORS="$LS_COLORS:di=1;97:fi=0;97:ex=0;97:no=0;90:"
-alias l="ls --all --author --color=auto --group-directories-first --human-readable -l --size -v -1"
-alias ll="ls --all --color=auto --group-directories-first -v -1"
-
-# Music
-mpva() { find "$ORIGIN/musics" -type f -exec mpv --shuffle --no-video {} +; }
-mpvc() { find "$ORIGIN/musics/classical" -type f -exec mpv --shuffle --no-video {} +; }
-mpvo() { find "$ORIGIN/musics/others" -type f -exec mpv --shuffle --no-video {} +; }
-mpvs() { find "$ORIGIN/musics" -type f -ipath "*$1*" -exec mpv --shuffle --no-video {} +; }
-
-# Others
-alias ...="cd ../../"
-alias ..="cd ../"
-alias :q="exit"
-alias duu="du -ah --max-depth=1 . | sort -hr"
-alias e="exit"
-alias m="cd $ORIGIN"
-alias rm__="find . -name '._*' -ls -delete"
-alias rmr="rm -rfI"
-alias src="source ~/.zshrc"
-alias vim=nvim
 
 # Backup
 # ------------------------------------------
@@ -197,9 +82,7 @@ alias vim=nvim
 # Private SSH variables are in a .zsh file located in $ZSH_CUSTOM
 alias ssh0="ssh \$_SSH_USER_NAME@\$_SSH_PUBLIC_IP -p \$_SSH_PORT"
 alias sshF="sshfs \$_SSH_USER_NAME@\$_SSH_PUBLIC_IP: -p \$_SSH_PORT ssh_folder"
-alias sshX="ssh -X \$_SSH_USER_NAME@\$_SSH_PUBLIC_IP -p \$_SSH_PORT"
 sshL() { ssh -L "16006:127.0.0.1:$1" "$_SSH_USER_NAME@$_SSH_PUBLIC_IP" -p "$_SSH_PORT"; }
-scpp() { scp -r -p -P "$_SSH_PORT" "$1" "$_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/Downloads"; }
 
 # !!!!! WARNING !!!!!
 # The rsync command is powerful but dangerous if misused
@@ -218,32 +101,64 @@ bbb() {
     fi
 }
 
+# Aliases
+# ------------------------------------------
+# ------------------------------------------
+
+# Git
+alias gitc="git cherry -v"
+alias gitp="git pull"
+alias gits="git status"
+alias gitu="git config --get remote.origin.url"
+
+# Display CSV files
+alias csvv="vi -c 'set nowrap' -c 'set scrolloff=5' -c 'set number' -c '1split | wincmd w'"
+
+# Complete and small ls with specific colors
+export LS_COLORS="$LS_COLORS:di=1;97:fi=0;97:ex=0;97:no=0;90:"
+alias l="ls --all --author --color=auto --group-directories-first --human-readable -l --size -v -1"
+alias ll="ls --all --color=auto --group-directories-first -v -1"
+
+# Others
+alias ...="cd ../../"
+alias ..="cd ../"
+alias :q="exit"
+alias duu="du -ah --max-depth=1 . | sort -hr"
+alias e="exit"
+alias m="cd $ORIGIN"
+alias rm__="find . -name '._*' -ls -delete"
+alias rmr="rm -rfI"
+alias vim=nvim
+
 # Functions
 # ------------------------------------------
 # ------------------------------------------
 
-# Clear string: replace [spaces / tabs / new lines], special characters, etc., by _, and remove capital letters
-clearString() {
-    echo "$1" | tr '\n' '_' | sed -E -e "s/[-':;,.]+/_/g" -e "s/[[:space:]]+/_/g" -e 's/_+/_/g' -e 's/_$//' -e 's/^_//' | tr '[:upper:]' '[:lower:]' | pbcopy
+# Clear string
+_clear_string() {
+    local s
+    s="$(printf '%s' "$1" | tr '\n' '_' | sed -E -e "s/[-':;,.]+/_/g" -e "s/[[:space:]]+/_/g" -e 's/_+/_/g' -e 's/_$//' -e 's/^_//')"
+    printf '%s' "${s:l}"
 }
+
+# Clear string and copy the result to the clipboard
+clearString() { _clear_string "$1" | pbcopy; }
 
 # Clear string of all files present in current path
 clearStringAll() {
+    local file_path new_name ext
     for file_path in *; do
-        clearString "$file_path"
-        mv -- "$file_path" "$(pbpaste)"
+        ext="${file_path:e}"
+        if [[ -f "$file_path" && -n "$ext" ]]; then
+            new_name="$(_clear_string "${file_path:r}").${ext:l}"
+        else
+            new_name="$(_clear_string "$file_path")"
+        fi
+        [[ "$new_name" = "$file_path" ]] || mv -n -- "$file_path" "$new_name"
     done
 }
 
-# Clear thumbnails folders
-clearThumbnails() {
-    find . -name ".thumbnails" -ls -exec rm -rf "{}" \;
-    find . -name ".Thumbnails" -ls -exec rm -rf "{}" \;
-}
-
 # Main command to compile latex projects (or use latexmk)
-# bibtex / biber: both can be used, depending on how the bibliography is made
-# A different compiler can be used, as pdflatex for example
 compiletex() {
     lualatex "$1.tex"
     biber "$1"
@@ -253,44 +168,17 @@ compiletex() {
     lualatex "$1.tex"
 }
 
-# Countdown function, argument is in seconds
-countdown() {
-    local remaining=$1
-    while ((remaining > 0)); do
-        printf "\r--> %d <-- " "$remaining"
-        ((remaining--))
-        sleep 1
-    done
-    printf "\r--> 0 <-- \n"
-}
-
-# Copy folder with progress bar
+# Miscellaneous
 cpr() { rsync --archive --human-readable --info=progress2 "$1" "$2"; }
-
-# Find $1 largest files
 duuu() { find . -type f -exec du -h {} + | sort -rh | head -n "$1"; }
-
-# Fatal kill
-fatalKill() { ps aux | grep "$1" | grep -v grep | awk '{print $2}' | xargs kill -9; }
-
-# Find files and folders, case insensitive
 findd() { find . -iname "*$1*" 2>/dev/null; }
-
-# Find out the pid of a specified process (regex are working)
-# WARNING: without sudo it will only find processes of the current user
-findPID() { lsof -t -c "$@"; }
-
-# Find files of a given extension
-findSameExtension() { find . -iname "*.$1"; }
-
-# Get command history
-getHistory() { history | awk '{print $2}' | sort | uniq -c | sort -nr | head -n "$1"; }
-
-# Special grep for projects
 grepp() { grep -R "$1" . --ignore-case --exclude-dir={.git,.venv,data,docs,materials,resources}; }
 
-# Create a password of size $1
-pwgenn() { pwgen -cny --secure "$1" 1 | pbcopy; }
+# Music
+mpva() { find "$ORIGIN/musics" -type f -exec mpv --shuffle --no-video {} +; }
+mpvc() { find "$ORIGIN/musics/classical" -type f -exec mpv --shuffle --no-video {} +; }
+mpvo() { find "$ORIGIN/musics/others" -type f -exec mpv --shuffle --no-video {} +; }
+mpvs() { find "$ORIGIN/musics" -type f -ipath "*$1*" -exec mpv --shuffle --no-video {} +; }
 
 # Clean Python files
 pyclean() {
@@ -300,19 +188,25 @@ pyclean() {
     find . -name "__pycache__" -ls -delete
 }
 
-# Rename all files in a folder
-# ls -tr: oldest modified file will have index 0
+# Rename all files in a folder (oldest has index 0)
 renameAll() {
-    local idx=0 nb_files nb_padding extension idx_name suffix file
-    nb_files=$(($(ls -1 | wc -l) - 1))
-    nb_padding=${#nb_files}
+    local idx=0 max nb_padding suffix file extension
+    local -a files tmp_names
+    files=(*(.Om))
+    max=$((${#files} - 1))
+    ((max < 0)) && return 0
+    nb_padding=${#max}
     suffix="${1:+_$1}"
-    # Use zsh glob qualifier to sort by mtime, oldest first (Om = reverse mtime order)
-    for file in *(.Om); do
+    for file in $files; do
+        tmp_names+=(".renameAll_tmp_${idx}")
+        mv -- "$file" "${tmp_names[-1]}"
+        ((idx++))
+    done
+    idx=0
+    for file in $files; do
         extension="${file:e}"
         [[ -n "$extension" ]] && extension=".$extension"
-        idx_name=$(printf "%0${nb_padding}d" "$idx")
-        mv -- "$file" "${idx_name}${suffix}${extension}"
+        mv -n -- "${tmp_names[idx + 1]}" "$(printf "%0${nb_padding}d" "$idx")${suffix}${extension}"
         ((idx++))
     done
 }
@@ -328,10 +222,7 @@ rmtex() {
     fi
 }
 
-# Functions to download videos (format index, link)
-yyy() { yt-dlp --verbose --output "%(title)s.mp3" "$2" -f "$1" -x --audio-format "mp3" --rm-cache-dir; }
-
-# fzf
+# FZF functions
 # ------------------------------------------
 # ------------------------------------------
 
@@ -343,7 +234,7 @@ cdd() {
     [[ -n "$directories" ]] && cd "${directories[1]}"
 }
 
-# Open firefox favorites with fzf
+# Open URLs (default)
 ff() {
     local IFS=$'\n'
     local files
@@ -351,7 +242,7 @@ ff() {
     [[ -n "$files" ]] && firefox "${files[@]}"
 }
 
-# Open firefox favorites with fzf (private window)
+# Open URLs (private)
 ffp() {
     local IFS=$'\n'
     local files
@@ -359,7 +250,7 @@ ffp() {
     [[ -n "$files" ]] && firefox --private-window "${files[@]}"
 }
 
-# fkill - kill process (from fzf)
+# Kill process
 fkill() {
     local pid
     pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
@@ -369,7 +260,7 @@ fkill() {
     fi
 }
 
-# fshow - git commit browser (from fzf)
+# Show git commits
 fshow() {
     git log --graph --color=always \
         --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
@@ -381,7 +272,7 @@ fshow() {
 FZF-EOF"
 }
 
-# Open files with nvim
+# Open files with neovim
 vv() {
     local IFS=$'\n'
     local files
@@ -389,36 +280,19 @@ vv() {
     [[ -n "$files" ]] && vim "${files[@]}"
 }
 
-# Open files (general)
-oo() {
-    local IFS=$'\n'
-    local files
-    files=($(find . -type f | fzf-tmux --query="$1" --multi --select-1 --exit-0))
-    [[ -n "$files" ]] && open "${files[@]}"
-}
-
-# Main git + python
+# Main commands
 # ------------------------------------------
 # ------------------------------------------
 
-# Aliases
-alias gitc="git cherry -v"
-alias gitp="git pull"
-alias gits="git status"
-alias gitu="git config --get remote.origin.url"
-
-# Simple functions
-gitd_() {
-    git add -A
-    git commit -m "Done"
-    git push
-}
-gitpp() { for i in */.git; do (
-    echo "$i"
+# Git pull
+gitpp() { for i in */.git(N); do (
+    echo "-----> $i"
     cd "$i/.." || continue
     git pull
 ); done; }
-gitss() { for i in */.git; do (
+
+# Git status
+gitss() { for i in */.git(N); do (
     echo "-----> $i"
     cd "$i/.." || continue
     git status --ignored
@@ -428,7 +302,7 @@ gitss() { for i in */.git; do (
 _private_git_command() {
     (
         cd "$1" || return
-        for i in */.git; do
+        for i in */.git(N); do
             (
                 printf "%s\n" "$i"
                 cd "$i/.." || exit
@@ -448,14 +322,11 @@ main_git() {
 }
 
 # Main update
-# ------------------------------------------
-# ------------------------------------------
-
 main_update() {
     printf "\nMAIN UPDATE\n"
     printf "------------------------------------------\n\n"
 
-    printf "---> NPM\n"
+    printf "---> npm\n"
     npm install -g npm@latest
     npx skills update
 
@@ -468,7 +339,7 @@ main_update() {
         printf "---> darwin\n"
         softwareupdate --install --all
 
-        printf "---> Homebrew\n"
+        printf "---> homebrew\n"
         brew update
         brew outdated
         brew upgrade
@@ -477,9 +348,6 @@ main_update() {
 }
 
 # Main clean
-# ------------------------------------------
-# ------------------------------------------
-
 main_clean() {
     printf "\nMAIN CLEAN\n"
     printf "------------------------------------------\n\n"
@@ -498,9 +366,6 @@ main_clean() {
 }
 
 # Main all
-# ------------------------------------------
-# ------------------------------------------
-
 main_all() {
     main_git pull
     main_git status
@@ -509,13 +374,9 @@ main_all() {
     omz update
 
     printf "---> neovim\n"
-    nvim --headless +"TSUpdate" +q
-    nvim --headless +"Lazy sync" +q
+    nvim --headless "+Lazy! sync" +qa
+    nvim --headless "+lua require('nvim-treesitter').update():wait(300000)" +qa
 }
-
-# Additional plugins
-source $ORIGIN/git_apps/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $ORIGIN/git_apps/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # Python
 # ------------------------------------------
@@ -523,16 +384,11 @@ source $ORIGIN/git_apps/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # TODO: which python version?
 alias python="python3"
 
-# Python functions
-alias mdd="python -m rich.markdown"
-
 # Automatically activate virtual environment
 VENV_PATH="$HOME/.venv"
 if [[ -f "$VENV_PATH/bin/activate" ]]; then
     source "$VENV_PATH/bin/activate"
 fi
 
-# Most used commands are kept in a custom history
-# When a session is closed, history is reset to default
-# zsh_history_clear is declared in a .zsh file located in $ZSH_CUSTOM
+# Reset history to default when session is closed
 trap "zsh_history_clear" 0
