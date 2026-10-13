@@ -455,6 +455,9 @@ main_update() {
     printf "\nMAIN UPDATE\n"
     printf "------------------------------------------\n\n"
 
+    printf "---> NPM\n"
+    npm install -g npm@latest
+
     if [[ $_SYSTEM = "android" ]]; then
         printf "---> PKG\n"
         pkg update -y
