@@ -7,6 +7,8 @@ if [[ $_uname_s == "Darwin" ]]; then
     _SYSTEM="darwin"
 elif [[ $_uname_o == "Android" ]]; then
     _SYSTEM="android"
+else
+    _SYSTEM="unknown"
 fi
 
 # Unset unused variables
@@ -51,6 +53,10 @@ elif [[ $_SYSTEM = "darwin" ]]; then
     export PATH="/opt/homebrew/bin:$PATH"
     export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
     export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
+
+# Other systems
+else
+    ORIGIN="$HOME/data"
 fi
 
 # From template
@@ -170,7 +176,7 @@ compiletex() {
 
 # Miscellaneous
 cpr() { rsync --archive --human-readable --info=progress2 "$1" "$2"; }
-duuu() { find . -type f -exec du -h {} + | sort -rh | head -n "$1"; }
+duuu() { find . -type f -exec du -h {} + | sort -rh | head -n "${1:-20}"; }
 findd() { find . -iname "*$1*" 2>/dev/null; }
 grepp() { grep -R "$1" . --ignore-case --exclude-dir={.git,.venv,data,docs,materials,resources}; }
 
@@ -190,7 +196,7 @@ pyclean() {
 
 # Rename all files in a folder (oldest has index 0)
 renameAll() {
-    local idx=0 max nb_padding suffix file extension
+    local idx=0 max nb_padding suffix file extension target
     local -a files tmp_names
     files=(*(.Om))
     max=$((${#files} - 1))
@@ -206,7 +212,13 @@ renameAll() {
     for file in $files; do
         extension="${file:e}"
         [[ -n "$extension" ]] && extension=".$extension"
-        mv -n -- "${tmp_names[idx + 1]}" "$(printf "%0${nb_padding}d" "$idx")${suffix}${extension}"
+        target="$(printf "%0${nb_padding}d" "$idx")${suffix}${extension}"
+        if [[ -e "$target" ]]; then
+            echo "renameAll: '$target' already exists, restoring '$file'" >&2
+            mv -n -- "${tmp_names[idx + 1]}" "$file"
+        else
+            mv -- "${tmp_names[idx + 1]}" "$target"
+        fi
         ((idx++))
     done
 }
@@ -214,11 +226,12 @@ renameAll() {
 # Clean Tex files, argument for maxdepth
 rmtex() {
     local depth="${1:-1}"
-    find . -maxdepth "$depth" -name "main-blx.bib" -delete
+    local regex=".*\.(aux|dvi|log|out|toc|bbl|blg|synctex\.gz|acn|acr|alg|bcf|glg|glo|gls|ist|run\.xml|nav|snm|vrb|fls|fdb_latexmk|brf|loc|soc|ilg|ind|nlo|nls|lof|lot|maf|mtc[0-9]*)"
+    find . -maxdepth "$depth" -type f -name "main-blx.bib" -delete
     if [[ $_SYSTEM = "darwin" ]]; then
-        find -E . -maxdepth "$depth" -regex ".*\.(aux|dvi|log|out|toc|bbl|blg|synctex.gz|acn|acr|alg|bcf|glg|glo|gls|ist|run.xml|nav|snm|vrb|fls|fdb_latexmk|brf|loc|soc|ilg|ind|nlo|nls|lof|lot|maf|mtc.*)" -delete
+        find -E . -maxdepth "$depth" -type f -regex "$regex" -delete
     else
-        find . -maxdepth "$depth" -regextype posix-extended -regex ".*\.(aux|dvi|log|out|toc|bbl|blg|synctex.gz|acn|acr|alg|bcf|glg|glo|gls|ist|run.xml|nav|snm|vrb|fls|fdb_latexmk|brf|loc|soc|ilg|ind|nlo|nls|lof|lot|maf|mtc.*)" -delete
+        find . -maxdepth "$depth" -type f -regextype posix-extended -regex "$regex" -delete
     fi
 }
 
@@ -360,8 +373,8 @@ main_clean() {
     elif [[ $_SYSTEM = "darwin" ]]; then
         printf "---> Homebrew\n"
         brew doctor
-        brew cleanup
         brew autoremove
+        brew cleanup
     fi
 }
 
