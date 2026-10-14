@@ -78,6 +78,7 @@ setopt RM_STAR_SILENT
 plugins=(
     colored-man-pages
     extract
+    vi-mode
     zsh-autosuggestions
     zsh-syntax-highlighting
 )
