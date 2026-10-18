@@ -94,6 +94,7 @@ source $ZSH/oh-my-zsh.sh
 alias ssh0="ssh \$_SSH_USER_NAME@\$_SSH_PUBLIC_IP -p \$_SSH_PORT"
 alias sshF="sshfs \$_SSH_USER_NAME@\$_SSH_PUBLIC_IP: -p \$_SSH_PORT ssh_folder"
 sshL() { ssh -L "16006:127.0.0.1:$1" "$_SSH_USER_NAME@$_SSH_PUBLIC_IP" -p "$_SSH_PORT"; }
+scpp() { scp -r -p -P "$_SSH_PORT" "$1" "$_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/Downloads"; }
 
 # !!!!! WARNING !!!!!
 # The rsync command is powerful but dangerous if misused
