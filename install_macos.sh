@@ -97,6 +97,7 @@ brew install --cask gopanda
 brew install --cask inkscape
 brew install --cask keepassxc
 brew install --cask libreoffice
+brew install --cask lightcraft
 brew install --cask mpv
 brew install --cask openmtp
 brew install --cask sabaki
