@@ -128,6 +128,9 @@ defaults write com.apple.finder DisableAllAnimations -bool true
 defaults write com.apple.finder QuitMenuItem -bool YES
 defaults write com.apple.screencapture location ~/Downloads
 
+# Apple foundation models
+sudo fm license
+
 # Launch common script
 ./install_common.sh
 
