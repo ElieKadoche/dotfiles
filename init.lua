@@ -156,7 +156,7 @@ vim.keymap.set("n", "<leader><space>", ":lua vim.diagnostic.open_float(0, {scope
 
 -- 1 sentence per line
 vim.keymap.set("n", "<leader>p", function()
-	vim.cmd([[:.s/\. \+/\.\r/g]])
+	vim.cmd([[keeppatterns .s/\([.!?…]\+["')\]»”’]*\)\s\+/\1\r/g]])
 end, { silent = true })
 
 -- Enable / disable wrap
