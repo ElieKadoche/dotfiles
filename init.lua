@@ -165,10 +165,21 @@ vim.keymap.set("n", "<leader>w", function()
 	print("wrap: " .. tostring(vim.opt.wrap:get()))
 end, { desc = "Toggle wrap" })
 
+-- Enable / disable diagnostics and formatting
+vim.keymap.set("n", "<leader>k", function()
+	local enabled = vim.diagnostic.is_enabled()
+	vim.diagnostic.enable(not enabled)
+	vim.g.disable_autoformat = enabled
+	print("Diagnostics / formatting: " .. (not enabled and "ENABLED" or "DISABLED"))
+end, { desc = "Toggle diagnostics and formatting" })
+
 -- Trim white spaces at the end of lines
 vim.api.nvim_create_autocmd("BufWritePre", {
 	pattern = "*",
 	callback = function()
+		if vim.g.disable_autoformat then
+			return
+		end
 		vim.cmd([[%s/\s\+$//e]])
 	end,
 })
@@ -518,6 +529,9 @@ require("lazy").setup({
 						lsp_format = "fallback",
 					},
 					format_on_save = function(bufnr)
+						if vim.g.disable_autoformat then
+							return nil
+						end
 						local filename = vim.api.nvim_buf_get_name(bufnr)
 						if filename:match("%.zsh_history$") then
 							return nil
