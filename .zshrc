@@ -321,7 +321,6 @@ main_git() {
     printf "\nMAIN GIT\n"
     printf "------------------------------------------\n\n"
     _private_git_command "$ORIGIN/git_apps" "$1"
-    _private_git_command "$ORIGIN/git_apps/_custom" "$1"
 }
 
 # Main update
