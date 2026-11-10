@@ -253,22 +253,6 @@ cdd() {
     [[ -n "$directories" ]] && cd "${directories[1]}"
 }
 
-# Open URLs (default)
-ff() {
-    local IFS=$'\n'
-    local files
-    files=($(find "$ORIGIN/documents/internet" -name "*.html" | fzf-tmux --query="$1" --multi --select-1 --exit-0))
-    [[ -n "$files" ]] && firefox "${files[@]}"
-}
-
-# Open URLs (private)
-ffp() {
-    local IFS=$'\n'
-    local files
-    files=($(find "$ORIGIN/documents/internet" -name "*.html" | fzf-tmux --query="$1" --multi --select-1 --exit-0))
-    [[ -n "$files" ]] && firefox --private-window "${files[@]}"
-}
-
 # Kill process
 fkill() {
     local pid
