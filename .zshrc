@@ -102,7 +102,7 @@ scpp() { scp -r -p -P "$_SSH_PORT" "$1" "$_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/Downl
 # The best sync method is -c (--checksum), but it is costly
 bbb() {
     if [[ "$1" = "android" ]]; then
-        rsync -ivhc --cc=xxh128 --recursive --delete --iconv=utf-8,utf-8-mac --rsync-path=/opt/homebrew/bin/rsync --exclude={"/backup/*","/git_apps/*","/miscellaneous/*"} -e "ssh -p $_SSH_PORT" "$_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/data/" "$ORIGIN/"
+        rsync -ivhc --cc=xxh128 --recursive --delete --iconv=utf-8,utf-8-mac --rsync-path=/opt/homebrew/bin/rsync --exclude={"/backup/*","/git_apps/*"} -e "ssh -p $_SSH_PORT" "$_SSH_USER_NAME@$_SSH_PUBLIC_IP:~/data/" "$ORIGIN/"
     elif [[ "$1" = "backup" ]]; then
         rsync -ivhc --cc=xxh128 --recursive --delete --iconv=utf-8,utf-8-mac --exclude={"/backup/completed/*","/documents/*","/git_apps/*"} "$ORIGIN/" /Volumes/backup/data/
     elif [[ "$1" = "safety" ]]; then
