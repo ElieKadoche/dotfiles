@@ -52,6 +52,7 @@ brew install languagetool
 brew install ltex-ls-plus
 brew install lua
 brew install lua-language-server
+brew install mpv
 brew install ncdu
 brew install neovim
 brew install nmap
@@ -98,7 +99,6 @@ brew install --cask inkscape
 brew install --cask keepassxc
 brew install --cask libreoffice
 brew install --cask lightcraft
-brew install --cask mpv
 brew install --cask openmtp
 brew install --cask sabaki
 brew install --cask skim
