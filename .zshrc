@@ -186,12 +186,6 @@ duuu() { find . -type f -exec du -h {} + | sort -rh | head -n "${1:-20}"; }
 findd() { find . -iname "*$1*" 2>/dev/null; }
 grepp() { grep -R "$1" . --ignore-case --exclude-dir={.git,.venv,data,docs,materials,resources}; }
 
-# Music
-mpva() { find "$ORIGIN/documents/musics" -type f -exec mpv --shuffle --no-video {} +; }
-mpvc() { find "$ORIGIN/documents/musics/classical" -type f -exec mpv --shuffle --no-video {} +; }
-mpvo() { find "$ORIGIN/documents/musics/others" -type f -exec mpv --shuffle --no-video {} +; }
-mpvs() { find "$ORIGIN/documents/musics" -type f -ipath "*$1*" -exec mpv --shuffle --no-video {} +; }
-
 # Clean Python files
 pyclean() {
     find . -name "*.pyc" -ls -delete
