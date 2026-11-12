@@ -915,6 +915,14 @@ vim.api.nvim_set_hl(0, "SpellCap", { underline = true, sp = "#ff0000" })
 vim.api.nvim_set_hl(0, "SpellLocal", { underline = true, sp = "#ff0000" })
 vim.api.nvim_set_hl(0, "SpellRare", { underline = true, sp = "#ff0000" })
 
+-- Diff (vim -d)
+vim.opt.fillchars:append({ diff = "╱" })
+vim.api.nvim_set_hl(0, "DiffAdd", { bg = "#1f5a2e" })
+vim.api.nvim_set_hl(0, "DiffChange", { bg = "#454545" })
+vim.api.nvim_set_hl(0, "DiffText", { bg = "#ffd700", fg = "#000000", bold = true })
+vim.api.nvim_set_hl(0, "DiffDelete", { bg = "#401a1f", fg = "#6b3a40" })
+vim.api.nvim_set_hl(0, "Folded", { bg = "#1c1c1c", fg = "#a0a0a0" })
+
 -- nvim-tree
 vim.api.nvim_set_hl(0, "NvimTreeExecFile", { fg = "#ffffff" })
 vim.api.nvim_set_hl(0, "NvimTreeFileName", { fg = "#ffffff", bg = "#000000" })
