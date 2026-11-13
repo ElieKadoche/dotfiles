@@ -243,7 +243,7 @@ rmtex() {
 cdd() {
     local IFS=$'\n'
     local directories
-    directories=($(find "$ORIGIN/" -type d | fzf-tmux --query="$1" --select-1 --exit-0))
+    directories=($(find . -type d | fzf-tmux --query="$1" --select-1 --exit-0))
     [[ -n "$directories" ]] && cd "${directories[1]}"
 }
 
@@ -269,11 +269,19 @@ fshow() {
 FZF-EOF"
 }
 
+# Open any files
+oo() {
+    local IFS=$'\n'
+    local files
+    files=($(find . -type f | fzf-tmux --query="$1" --multi --select-1 --exit-0))
+    [[ -n "$files" ]] && open "${files[@]}"
+}
+
 # Open files with neovim
 vv() {
     local IFS=$'\n'
     local files
-    files=($(find "$ORIGIN/" -type f | fzf-tmux --query="$1" --multi --select-1 --exit-0))
+    files=($(find . -type f | fzf-tmux --query="$1" --multi --select-1 --exit-0))
     [[ -n "$files" ]] && vim "${files[@]}"
 }
 
