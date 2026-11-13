@@ -193,6 +193,10 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 	end,
 })
 
+-- Neovim diff configuration
+vim.opt.fillchars:append({ diff = "╱" })
+vim.api.nvim_create_autocmd("VimEnter", { command = "if &diff | execute 'windo set wrap' | endif" })
+
 -- Install lazy
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -916,7 +920,6 @@ vim.api.nvim_set_hl(0, "SpellLocal", { underline = true, sp = "#ff0000" })
 vim.api.nvim_set_hl(0, "SpellRare", { underline = true, sp = "#ff0000" })
 
 -- Diff (vim -d)
-vim.opt.fillchars:append({ diff = "╱" })
 vim.api.nvim_set_hl(0, "DiffAdd", { bg = "#1f5a2e" })
 vim.api.nvim_set_hl(0, "DiffChange", { bg = "#454545" })
 vim.api.nvim_set_hl(0, "DiffText", { bg = "#ffd700", fg = "#000000", bold = true })
